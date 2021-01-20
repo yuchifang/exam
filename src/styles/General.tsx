@@ -54,3 +54,18 @@ export const WSubmitButtom = styled.button`
         outline:none;
     }
 `
+
+export const WUserImg = styled.img.attrs((props: any) => ({
+    src: props.src ? props.src : "https://fakeimg.pl/250x250/aaa/000/?text=fakeImg",
+}))`
+    border-radius: 50%;
+    height:150px;
+    width:150px;
+    text-align: center;
+`
+export const WUserText = styled.div`
+    margin-top:20px;
+    text-align: center;
+    font-size: 20px;
+    
+`

@@ -32,7 +32,7 @@ interface LoginPageProps {
 
 export const HomePage: React.FC<LoginPageProps> = ({ }) => {
     return (
-        <BrowserRouter>
+        <>
             <FirstTopBlock />
             <LoginIn />
             <WLoginSection>
@@ -51,6 +51,6 @@ export const HomePage: React.FC<LoginPageProps> = ({ }) => {
                     </Switch>
                 </WLoginContainer>
             </WLoginSection>
-        </BrowserRouter>
+        </>
     );
 }

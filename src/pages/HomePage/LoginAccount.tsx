@@ -3,12 +3,12 @@ import { WInput, WSubmitButtom } from "../../styles/General"
 import axios from "axios"
 import jwtDecode from "jwt-decode";
 import { Spinner } from "react-bootstrap";
-import { RouteComponentProps } from "react-router-dom"
+import { RouteComponentProps, Redirect } from "react-router-dom"
 interface LoginAccountProps extends RouteComponentProps {
 
 }
 
-export const LoginAccount: React.FC<LoginAccountProps> = ({ history }) => {
+export const LoginAccount: React.FC<LoginAccountProps> = ({ history, match, location }) => {
 
     const passwordRef = useRef<HTMLInputElement>(null)
     const nameRef = useRef<HTMLInputElement>(null)
@@ -33,14 +33,16 @@ export const LoginAccount: React.FC<LoginAccountProps> = ({ history }) => {
             })
             .then(() => {
                 setLoginStatus("success")
-                history.push("/UserListPage/users")
+                history.replace("/UserListPage/users")
             })
             .catch((res) => {
                 setLoginStatus("errorr")
                 alert(res)
             })
     }
-
+    console.log({ history })
+    console.log({ match })
+    console.log({ location })
     return (
         <>
             <WInput placeholder="使用者名稱" type="text" ref={passwordRef} />
