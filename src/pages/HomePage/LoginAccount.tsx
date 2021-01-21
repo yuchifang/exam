@@ -33,7 +33,7 @@ export const LoginAccount: React.FC<LoginAccountProps> = ({ history, match, loca
             })
             .then(() => {
                 setLoginStatus("success")
-                history.replace("/UserListPage/users")
+                history.push("/UserListPage/users")
             })
             .catch((res) => {
                 setLoginStatus("errorr")

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { LoginOut } from "../pages/Header/LoginOut"
 import { FirstTopBlock } from "../components/FirstTopBlock"
-import { BrowserRouter, Switch, Route, Link } from 'react-router-dom'
+import { BrowserRouter, Switch, Route, Link, RouteComponentProps } from 'react-router-dom'
 import { WUserText, WUserImg } from "../styles/General"
 import axios from "axios"
 import styled from "styled-components"
@@ -14,24 +14,26 @@ const WUserListSection = styled.section`
 const WUserListContainer = styled.div`
     display:flex;
     justify-content: center;
-    max-width:1200px;
+    max-width:1000px;
     margin:auto;
     flex-wrap: wrap;
 `
 const WUserBlock = styled.figure`
-    width:33%;
+    cursor:pointer;
+    margin: 0 4rem auto;
     display: flex;
-    a{
-        margin: 0 auto;
-    }
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 4rem;
 `
 
 
-interface UserListPageProps {
+interface UserListPageProps extends RouteComponentProps {
 
 }
 
-export const UserListPage: React.FC<UserListPageProps> = ({ }) => {
+export const UserListPage: React.FC<UserListPageProps> = ({ history }) => {
 
     const [userList, setUserList] = useState([])
 
@@ -48,29 +50,33 @@ export const UserListPage: React.FC<UserListPageProps> = ({ }) => {
                 console.log(err)
             })
     }, [])
+
+    const handleUserBlockClick = (id: string) => {
+        console.log("eeee")
+        history.push(`/UserPage/users/${id}`)
+    }
     console.log("userList", userList);
+
     return (
         <>
-            <BrowserRouter>
-                <FirstTopBlock />
-                <LoginOut />
-                <WUserListSection>
-                    <WUserListContainer>
-                        {
-                            userList.length > 0 && userList.map((user: any) => {
-                                return (
-                                    <WUserBlock>
-                                        <Link to={`/UserPage/users/${user.id}`}>
-                                            <WUserImg src={user.picture_url} alt="userImg" />
-                                            <WUserText>{user.username}</WUserText>
-                                        </Link>
-                                    </WUserBlock>
-                                )
-                            })
-                        }
-                    </WUserListContainer>
-                </WUserListSection >
-            </BrowserRouter>
+            <FirstTopBlock />
+            <LoginOut />
+            <WUserListSection>
+                <WUserListContainer>
+                    {
+                        userList.length > 0 && userList.map((user: any) => {
+                            return (
+                                <WUserBlock onClick={() => handleUserBlockClick(user.id)}>
+                                    {/* <Link to={`/UserPage/users/${user.id}`}> */}
+                                    <WUserImg src={user.picture_url} alt="userImg" />
+                                    <WUserText>{user.username}</WUserText>
+                                    {/* </Link> */}
+                                </WUserBlock>
+                            )
+                        })
+                    }
+                </WUserListContainer>
+            </WUserListSection >
         </>
 
     );
