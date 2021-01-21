@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { LoginOut } from "../pages/Header/LoginOut"
 import { FirstTopBlock } from "../components/FirstTopBlock"
-import { BrowserRouter, Switch, Route, Link, RouteComponentProps } from 'react-router-dom'
+import { BrowserRouter, Switch, Route, Link, RouteComponentProps, useLocation } from 'react-router-dom'
 import { WUserText, WUserImg } from "../styles/General"
 import axios from "axios"
 import styled from "styled-components"
+import { Location } from "history"
 
 const WUserListSection = styled.section`
     padding-top:100px;
@@ -28,15 +29,32 @@ const WUserBlock = styled.figure`
     margin-bottom: 4rem;
 `
 
-
-interface UserListPageProps extends RouteComponentProps {
+interface UserListPageProps extends RouteComponentProps<{}, {}, TLocation> {
 
 }
 
-export const UserListPage: React.FC<UserListPageProps> = ({ history }) => {
+interface TLocation {
+    // hash: string | undefined
+    // key: string | undefined
+    // pathname: string | undefined
+    // search: string | undefined
+    jwtString: string,
+    name: string,
+    memberId: string,
+    // state?: {
+    //     jwtString: string
+    // } | undefined
+}
+interface TUser {
+    id: string,
+    picture_url: string | null,
+    username: string,
+}
 
-    const [userList, setUserList] = useState([])
-
+export const UserListPage: React.FC<UserListPageProps> = ({ history, location }) => {
+    const [userList, setUserList] = useState<TUser[]>([])
+    console.log("location", location)
+    console.log("history", history)
     useEffect(() => {
         const axiosGetAllUserList = async () => {
             const res = axios.get("https://weblab-react-special-midtern.herokuapp.com/v1/users/")
@@ -44,7 +62,7 @@ export const UserListPage: React.FC<UserListPageProps> = ({ history }) => {
         }
         axiosGetAllUserList()
             .then((res: any) => {
-                console.log("UserListPage", res.data.result)
+                // console.log("UserListPage", res.data.result)
                 setUserList(res.data.result)
             }).catch((err) => {
                 console.log(err)
@@ -52,11 +70,14 @@ export const UserListPage: React.FC<UserListPageProps> = ({ history }) => {
     }, [])
 
     const handleUserBlockClick = (id: string) => {
-        console.log("eeee")
-        history.push(`/UserPage/users/${id}`)
+        const locationUseList = {
+            pathname: `/UserPage/users/${id}`,
+            state: location.state,
+        }
+        history.push(locationUseList)
     }
-    console.log("userList", userList);
-
+    // console.log("userList", userList);
+    // console.log(history)
     return (
         <>
             <FirstTopBlock />
@@ -64,9 +85,9 @@ export const UserListPage: React.FC<UserListPageProps> = ({ history }) => {
             <WUserListSection>
                 <WUserListContainer>
                     {
-                        userList.length > 0 && userList.map((user: any) => {
+                        userList.length > 0 && userList.map((user: TUser) => {
                             return (
-                                <WUserBlock onClick={() => handleUserBlockClick(user.id)}>
+                                <WUserBlock key={user.id} onClick={() => handleUserBlockClick(user.id)}>
                                     {/* <Link to={`/UserPage/users/${user.id}`}> */}
                                     <WUserImg src={user.picture_url} alt="userImg" />
                                     <WUserText>{user.username}</WUserText>

@@ -8,11 +8,17 @@ interface LoginAccountProps extends RouteComponentProps {
 
 }
 
+interface DecodedData {
+    memberId: string,
+    name: string
+}
+
 export const LoginAccount: React.FC<LoginAccountProps> = ({ history, match, location }) => {
 
     const passwordRef = useRef<HTMLInputElement>(null)
     const nameRef = useRef<HTMLInputElement>(null)
     const [loginStatus, setLoginStatus] = useState("idle")
+    // const [jwtString, setJwtString] = useState("")
 
     const axiosLoginInAccount = async () => {
         setLoginStatus("loading")
@@ -27,22 +33,30 @@ export const LoginAccount: React.FC<LoginAccountProps> = ({ history, match, loca
     const handleSubmit = () => {
         axiosLoginInAccount()
             .then((res) => {
-                console.log("res", res);
-                const decoded = jwtDecode(res.data.result.authToken)
-                console.log("decoded", decoded);
+                console.log("res", res)
+                const jwtString = res.data.result.authToken
+                const decoded: DecodedData = jwtDecode(res.data.result.authToken)
+                const state = {
+                    memberId: decoded?.memberId,
+                    name: decoded?.name,
+                    jwtString: jwtString
+                }
+                return state
             })
-            .then(() => {
+            .then((res) => {
+                const location = {
+                    pathname: "/UserListPage/users",
+                    state: res
+                }
                 setLoginStatus("success")
-                history.push("/UserListPage/users")
+                history.push(location)
             })
             .catch((res) => {
                 setLoginStatus("errorr")
                 alert(res)
             })
     }
-    console.log({ history })
-    console.log({ match })
-    console.log({ location })
+
     return (
         <>
             <WInput placeholder="使用者名稱" type="text" ref={passwordRef} />
