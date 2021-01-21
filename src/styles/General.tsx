@@ -69,3 +69,5 @@ export const WUserText = styled.div`
     font-size: 20px;
     
 `
+
+
