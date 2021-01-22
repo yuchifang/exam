@@ -1,11 +1,11 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useEffect } from 'react'
 import { WInput, WSubmitButtom, WTag } from "../../styles/General"
-import axios from "axios"
-import jwtDecode from "jwt-decode";
+
 import { Spinner } from "react-bootstrap";
 import { FirstTopBlock } from "../../components/FirstTopBlock"
 import { RouteComponentProps, Link } from "react-router-dom"
 import styled from "styled-components"
+import { useUser } from "../../hook"
 
 const WLoginSection = styled.section`
     padding-top:200px;
@@ -37,47 +37,33 @@ export const LoginAccount: React.FC<LoginAccountProps> = ({ history, match, loca
 
     const passwordRef = useRef<HTMLInputElement>(null)
     const nameRef = useRef<HTMLInputElement>(null)
-    const [loginStatus, setLoginStatus] = useState("idle")
-    // const [jwtString, setJwtString] = useState("")
+    const { axiosStatus, userData, errorCode, axiosLoginAccount } = useUser()
 
-    const axiosLoginInAccount = async () => {
-        setLoginStatus("loading")
-        const res: any = await axios.post("https://api.weblab.tw/v1/auth/general-login", {
-            appId: "weblab",
-            account: nameRef.current?.value,
-            password: passwordRef.current?.value
-        })
-        return res
-    }
+    useEffect(() => {
+        if (axiosStatus === "success") {
+            const location = {
+                pathname: "/UserListPage/users",
+                state: userData
+            }
+            history.push(location)
+        } else if (axiosStatus === "error") {
+            alert(errorCode)
+        }
+
+
+    }, [errorCode])
 
     const handleSubmit = () => {
-        axiosLoginInAccount()
-            .then((res) => {
-                const jwtString = res.data.result.authToken
-                const decoded: DecodedData = jwtDecode(res.data.result.authToken)
-                console.log("decoded", decoded)
-                const state = {
-                    memberId: decoded?.memberId,
-                    jwtString: jwtString,
-                    username: decoded?.username
-                }
-                console.log("LoginAccount", state)
-                return state
-            })
-            .then((res) => {
-                const location = {
-                    pathname: "/UserListPage/users",
-                    state: res
-                }
-                setLoginStatus("success")
-                history.push(location)
-            })
-            .catch((res) => {
-                setLoginStatus("errorr")
-                alert(res)
-            })
+        let account: string
+        let password: string
+        if (nameRef.current?.value !== undefined && passwordRef.current?.value !== undefined) {
+            account = nameRef.current?.value
+            password = passwordRef.current?.value
+            axiosLoginAccount({ password, account })
+        } else {
+            alert("使用者名稱　密碼　不能為空白")
+        }
     }
-
     return (
         <>
             <FirstTopBlock />
@@ -94,8 +80,8 @@ export const LoginAccount: React.FC<LoginAccountProps> = ({ history, match, loca
                     <WInput placeholder="使用者名稱" type="text" ref={nameRef} />
                     <WInput placeholder="密碼" type="password" ref={passwordRef} />
                     <WSubmitButtom onClick={() => handleSubmit()}>
-                        {loginStatus !== "loading" && "登入"}
-                        {loginStatus === "loading" && <Spinner size="sm" animation="border" />}
+                        {axiosStatus !== "loading" && "登入"}
+                        {axiosStatus === "loading" && <Spinner size="sm" animation="border" />}
                     </WSubmitButtom>
                 </WLoginContainer>
             </WLoginSection>
