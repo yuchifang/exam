@@ -33,33 +33,24 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({ history }) => {
     const emailRef = useRef<HTMLInputElement>(null)
     const passwordRef = useRef<HTMLInputElement>(null)
     const nameRef = useRef<HTMLInputElement>(null)
-    const { axiosStatus, userData, errorCode, axiosCreateAccount } = useUser()
+    const { axiosStatus, axiosUserData, errorCode, message, axiosCreateAccount } = useUser()
 
     useEffect(() => {
         if (axiosStatus === "success") {
-            // const location = {
-            //     pathname: "/UserListPage/users",
-            //     state: userData
-            // }
-            // history.push(location)
-            console.log("success")
+            if (axiosUserData) {
+                axiosUserData.editMode = true
+                const locationUseList = {
+                    pathname: `/UserPage/users/${axiosUserData?.memberId}`,
+                    state: axiosUserData,
+                }
+                history.push(locationUseList)
+            }
         } else if (axiosStatus === "error") {
-            alert(errorCode)
+            alert("errorCode: " + errorCode + "message: " + message)
         }
 
 
     }, [errorCode])
-
-    // const axiosCreateAccount = async () => {
-    //     const res = axios.post("https://api.weblab.tw/v1/auth/register", {
-    //         appId: "weblab",
-    //         email: emailRef.current?.value,
-    //         username: nameRef.current?.value,
-    //         password: passwordRef.current?.value
-    //     })
-    //     return res
-    // }
-    //create success => get 資料
 
     const handleSubmit = () => {
         let email: string
@@ -71,23 +62,11 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({ history }) => {
             password = passwordRef.current?.value
             username = nameRef.current?.value
             axiosCreateAccount({ email, password, username })
-            // .then((res) => {
-            //     console.log("res", res)
-            // }).catch((err) => {
-            //     alert(err)
-            // }).then(() => {
-            //     // history
-            // })
         } else {
             alert("信箱 使用者名稱　密碼　不能為空白")
         }
     }
 
-    const get = () => {
-        axios.get("https://weblab-react-special-midtern.herokuapp.com/v1/users/")
-            .then((res) => { console.log("res", res.data) })
-
-    }
     return (
         <>
             <FirstTopBlock />
@@ -108,9 +87,12 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({ history }) => {
                         {axiosStatus !== "loading" && "加入"}
                         {axiosStatus === "loading" && <Spinner size="sm" animation="border" />}
                     </WSubmitButtom>
-                    <WSubmitButtom onClick={() => get()}>取</WSubmitButtom>
                 </WLoginContainer>
             </WLoginSection>
         </>
     );
 }
+// 　沒有選擇圖片　情況
+// 　加上必填提醒　
+//　沒有更新des　情況
+// 更新完回到　尚未編輯頁　

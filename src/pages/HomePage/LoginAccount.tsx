@@ -37,17 +37,17 @@ export const LoginAccount: React.FC<LoginAccountProps> = ({ history, match, loca
 
     const passwordRef = useRef<HTMLInputElement>(null)
     const nameRef = useRef<HTMLInputElement>(null)
-    const { axiosStatus, userData, errorCode, axiosLoginAccount } = useUser()
+    const { axiosStatus, axiosUserData, errorCode, message, axiosLoginAccount } = useUser()
 
     useEffect(() => {
         if (axiosStatus === "success") {
             const location = {
                 pathname: "/UserListPage/users",
-                state: userData
+                state: axiosUserData
             }
             history.push(location)
         } else if (axiosStatus === "error") {
-            alert(errorCode)
+            alert("errorCode: " + errorCode + "message: " + message)
         }
 
 

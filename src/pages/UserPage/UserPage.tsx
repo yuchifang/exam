@@ -7,7 +7,7 @@ import { Modal, Button } from "react-bootstrap";
 import { LoginOut } from "../Header/LoginOut"
 import { FirstTopBlock } from "../../components/FirstTopBlock"
 import { EditorPage } from "./EditorPage"
-
+import { useUser } from "../../hook"
 
 const WUserPageSection = styled.section`
     padding-top:100px;
@@ -66,9 +66,10 @@ interface TLocation {
     // key: string | undefined
     // pathname: string | undefined
     // search: string | undefined
-    jwtString: string,
+    jwtString?: string,
     username: string,
     memberId: string,
+    editMode?: boolean,
     // state?: {
     //     jwtString: string
     // } | undefined
@@ -87,38 +88,46 @@ interface UserData {
 
 export const UserPage: React.FC<UserPageProps> = ({ history, location, match }) => {
     const [showLightBox, setShowLightBox] = useState(false);
-    const [editDom, setEditDom] = useState(false);
-    const [userData, setUserData] = useState<UserData>()
+    const [editDom, setEditDom] = useState(location?.state?.editMode);
+    // const [userData, setUserData] = useState<UserData>()
     const [getDataStatus, setGetDataStatus] = useState("idle")
     const [lightBoxText, setLightBoxText] = useState("")
 
+    const { axiosStatus, axiosUserData, errorCode, message, userData, axiosGetSignUserData, axiosDeleteUserData } = useUser()
 
     const { userId } = match.params
 
-    const userEqualtoEditor = userId === location.state.memberId && userData?.username === location.state.username
+
+    const userEqualtoEditor = userId === location.state.memberId
     const { state } = location
-    console.log("state", state)
+    useEffect(() => {
+        axiosGetSignUserData(userId)
+
+    }, [userId, editDom])
+
+    console.log("axiosStatus", axiosStatus)
+    console.log([message])
+    console.log(errorCode)
+    console.log("editDom", editDom)
 
     useEffect(() => {
-        const axiosGetUserData = async () => {
-            setGetDataStatus("loading")
-            const res = await axios.get(`https://weblab-react-special-midtern.herokuapp.com/v1/users/${userId}`)
-            return res
+        console.log("errorCode", errorCode)
+        if (axiosStatus === "success") {
+            console.log("success")
+            console.log("userData", userData)
+            console.log([message])
+            if (message === "delete the member successfully") {
+                alert("deletesuccess")
+                const locationState = {
+                    pathname: "/UserListPage/users",
+                    state: axiosUserData
+                }
+                history.push(locationState)
+            }
+        } else if (axiosStatus === "error") {
+            alert("errorCode: " + errorCode + "message: " + message)
         }
-        axiosGetUserData()
-            .then((res) => {
-                setUserData(res.data.result)
-                console.log("res", res)
-            })
-            .then(() => {
-                setGetDataStatus("success")
-            })
-            .catch((err) => {
-                setGetDataStatus("error")
-                console.log(err)
-            })
-
-    }, [userId])
+    }, [errorCode])
 
     const closeDeleteLightBox = () => setShowLightBox(false);
 
@@ -128,23 +137,29 @@ export const UserPage: React.FC<UserPageProps> = ({ history, location, match }) 
     }
 
     const lightBoxDeleteConfirm = () => {
-        console.log("statesss", state)
         setShowLightBox(false)
-        const axiosDeleteData = async () => {
-            const res = await axios.delete(`https://weblab-react-special-midtern.herokuapp.com/v1/users/${userId}`, {
-                headers: {
-                    Authorization: `Bearer ${state.jwtString} `
-                }
-            })
-            return res
-        }
-        axiosDeleteData()
-            .then((res) => {
-                console.log("ressss", res)
-            })
-            .catch((err) => {
-                console.log("err", err)
-            })
+        axiosDeleteUserData({ userId, jwtString: state.jwtString })
+        //    const location = {
+        //         pathname: "/UserListPage/users",
+        //         state: axiosUserData
+        //     }
+        //     history.push(location)
+        //---------------------
+        // const axiosDeleteData = async () => {
+        //     const res = await axios.delete(`https://weblab-react-special-midtern.herokuapp.com/v1/users/${userId}`, {
+        //         headers: {
+        //             Authorization: `Bearer ${state.jwtString} `
+        //         }
+        //     })
+        //     return res
+        // }
+        // axiosDeleteData()
+        //     .then((res) => {
+        //         console.log("ressss", res)
+        //     })
+        //     .catch((err) => {
+        //         console.log("err", err)
+        //     })
     }
 
     const lightBoxEditConfirm = () => {
@@ -174,13 +189,11 @@ export const UserPage: React.FC<UserPageProps> = ({ history, location, match }) 
             </WUserPageContainer>
         </WUserPageSection>
     </>
-
-
     return (
         <>
             <FirstTopBlock />
             <LoginOut />
-            {getDataStatus === "success" && !editDom && <UserPage />}
+            {axiosStatus === "success" && !editDom && <UserPage />}
             {!!editDom &&
                 <EditorPage
                     userId={userId}
@@ -188,7 +201,8 @@ export const UserPage: React.FC<UserPageProps> = ({ history, location, match }) 
                     EditPageCancel={EditPageCancel}
                     editDom={editDom}
                     setEditDom={setEditDom}
-                    location={state}
+                    editorLocation={state}
+
 
                 />}
             {getDataStatus === "loading" && <h1>loading</h1>}

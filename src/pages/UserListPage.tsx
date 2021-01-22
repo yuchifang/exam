@@ -33,15 +33,10 @@ interface UserListPageProps extends RouteComponentProps<{}, {}, TLocation> {
 }
 
 interface TLocation {
-    // hash: string | undefined
-    // key: string | undefined
-    // pathname: string | undefined
-    // search: string | undefined
+
     jwtString: string,
     memberId: string,
-    // state?: {
-    //     jwtString: string
-    // } | undefined
+
 }
 interface TUser {
     id: string,

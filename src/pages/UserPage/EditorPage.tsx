@@ -1,9 +1,11 @@
 
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import styled from "styled-components"
 // import { useParams, Link, RouteComponentProps } from "react-router-dom"
 import axios from "axios"
 import { WUserImg, WSubmitButtom, outLineBlue } from "../../styles/General"
+import { useUser } from "../../hook"
+import { RouteComponentProps } from "react-router-dom"
 // import { Modal, Button } from "react-bootstrap";
 // import { LoginOut } from "../Header/LoginOut"
 // import { FirstTopBlock } from "../../components/FirstTopBlock"
@@ -81,16 +83,12 @@ const WUserDescriptionTextArea = styled.textarea`
 `
 
 interface TLocation {
-    // hash: string | undefined
-    // key: string | undefined
-    // pathname: string | undefined
-    // search: string | undefined
-    jwtString: string,
+
+    jwtString?: string,
     username: string,
     memberId: string,
-    // state?: {
-    //     jwtString: string
-    // } | undefined
+    editMode?: boolean,
+
 }
 interface EditorPageProps {
     userData?: {
@@ -100,10 +98,10 @@ interface EditorPageProps {
         username: string
     }
     EditPageCancel: () => void,
-    editDom: boolean,
-    setEditDom: React.Dispatch<React.SetStateAction<boolean>>,
+    editDom: boolean | undefined,
+    setEditDom: React.Dispatch<React.SetStateAction<boolean | undefined>>,
     userId: string,
-    location: TLocation
+    editorLocation: TLocation
 }
 
 export const EditorPage: React.FC<EditorPageProps> = ({
@@ -112,88 +110,46 @@ export const EditorPage: React.FC<EditorPageProps> = ({
     setEditDom,
     editDom,
     userId,
-    location
+    editorLocation
 }) => {
     const fileRef = useRef<HTMLInputElement>(null)
     const usernameRef = useRef<HTMLInputElement>(null)
     const textAreaRef = useRef<HTMLTextAreaElement>(null)
     const [imgUrl, setImgUrl] = useState<string>("")
 
-    const EditPageSave = async () => {
-        //-------deal file
+    const { axiosStatus, axiosUserData, errorCode, message, axiosUpdateAccount } = useUser()
+
+
+    useEffect(() => {
+        if (axiosStatus === "success") {
+            alert("更新成功")
+            // if (axiosUserData) {
+            // axiosUserData.editMode = false
+            // const locationUseList = {
+            //     pathname: `/UserPage/users/${axiosUserData?.memberId}`,
+            //     state: axiosUserData,
+            // }
+            setEditDom(false)
+            // }
+        } else if (axiosStatus === "error") {
+            alert("errorCode: " + errorCode + "message: " + message)
+        }
+
+    }, [errorCode])
+
+    const EditPageSave = () => {
+
+        let descripotion: string | null | undefined = !!textAreaRef?.current?.value ? textAreaRef?.current?.value : null
+        let username: string | undefined = !!usernameRef?.current?.value ? usernameRef?.current?.value : editorLocation.username
         let fileData: File | undefined
         if (fileRef.current?.files !== null) {
             fileData = fileRef.current?.files[0]
-        }
-        console.log("fileData", fileData)
-        const dataUrl: any = await getReadAsDataURL(fileData)
-        console.log("arrayBufferURL", dataUrl)
-        function getReadAsDataURL(file: any) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.addEventListener('load', () => {
-                    resolve(reader.result);
-                });
-                reader.readAsDataURL(file);
-            })
+            axiosUpdateAccount({ fileData, username, descripotion, userId, location: editorLocation })
+        } else {
+            alert("使用者名稱 為必填")
         }
 
-        const axiosUpdate = async (arrayBuffer: any) => {
-
-            const res = axios.post(`https://weblab-react-special-midtern.herokuapp.com/v1/users/${userId}`, {
-                username: usernameRef?.current?.value,
-                description: null,
-                pictureUrl: arrayBuffer
-            }, {
-                headers: {
-                    Authorization: `Bearer ${location.jwtString} `
-                },
-            })
-            return res
-        }
-        console.log("userId", userId)
-        console.log("location", location)
-        console.log("usernameRef?.current?.value,", usernameRef?.current?.value)
-        console.log("usernameRef?.current?.value,", typeof usernameRef?.current?.value)
-        console.log("textAreaRef?.current?.value", typeof textAreaRef?.current?.value)
-        console.log("dataUrl", dataUrl)
-        axiosUpdate(dataUrl)
-            .then((res) => {
-                console.log("res", res)
-            })
-            .catch((err) => {
-                console.log("err", err)
-            })
     }
-
-
-    // const arrayBuffer = await getArrayBuffer(fileRef?.current?.files[0]);
-    // console.log('arrayBuffer', arrayBuffer);
-    // const response = await uploadFile(arrayBuffer);
-    // console.log('response', response);
-
-    // function uploadFile(arrayBuffer) {
-    //     return fetch(`https://api.foobar.io`, {
-    //         method: 'POST',
-
-    //         // STEP 6：使用 JSON.stringify() 包起來送出
-    //         body: JSON.stringify({
-    //             appId: 3,
-    //             format: 'png',
-
-    //             // STEP 4：轉成 Uint8Array（這是 TypedArray）
-    //             // STEP 5：透過 Array.from 轉成真正的陣列
-    //             icon: Array.from(new Uint8Array(arrayBuffer)),
-    //         }),
-    //     }).then((res) => {
-    //         if (!res.ok) {
-    //             throw res.statusText;
-    //         }
-    //         return res.json()
-    //     })
-    //         .then(({ data }) => console.log('data', data))
-    //         .catch(err => console.log('err', err))
-    // }
 
     const handleImgChange = () => {
         let fileData: File | undefined
@@ -201,7 +157,6 @@ export const EditorPage: React.FC<EditorPageProps> = ({
             if (fileRef.current?.files[0]?.name !== "") {
 
                 fileData = fileRef.current?.files[0]
-                console.log("fileData", fileData)
                 if (fileData?.size !== undefined && fileData?.size < 300000) {
                     setImgUrl(URL.createObjectURL(fileData))
                 } else {
@@ -223,7 +178,7 @@ export const EditorPage: React.FC<EditorPageProps> = ({
                         <WLabelFile htmlFor="file" >選擇檔案</WLabelFile>
                         <WWarningSpan>上限300KB</WWarningSpan>
                     </WFileBlock>
-                    <WUserTextInput ref={usernameRef} placeholder={userData?.username} />
+                    <WUserTextInput required ref={usernameRef} placeholder={userData?.username} />
                 </WUserBlock>
                 <WUserDescriptionTextArea ref={textAreaRef} rows={4} cols={50} placeholder={!!userData?.description ? userData?.description : "type something"} />
                 <WButtonBlock>
