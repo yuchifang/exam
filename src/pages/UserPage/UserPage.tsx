@@ -123,6 +123,8 @@ export const UserPage: React.FC<UserPageProps> = ({ history, location, match }) 
 
     const { userId } = match.params
     const userEqualEditor = userId === location.state.memberId && userData?.username === location.state.name
+    const { state } = location
+    // console.log("state", state)
 
     useEffect(() => {
         const axiosGetUserData = async () => {
@@ -180,10 +182,6 @@ export const UserPage: React.FC<UserPageProps> = ({ history, location, match }) 
         setEditDom(false)
     }
 
-    const EditPageSave = () => {
-
-    }
-
     const UserPage = () => <>
         <WUserPageSection>
             <WUserPageContainer>
@@ -210,9 +208,13 @@ export const UserPage: React.FC<UserPageProps> = ({ history, location, match }) 
             <LoginOut />
             {getDataStatus === "success" && !editDom && <UserPage />}
             {!!editDom && <EditorPage
+                userId={userId}
                 userData={userData}
                 EditPageCancel={EditPageCancel}
-                EditPageSave={EditPageSave}
+                editDom={editDom}
+                setEditDom={setEditDom}
+                location={state}
+
             />}
             {getDataStatus === "loading" && <h1>loading</h1>}
             <LightBox //render props?

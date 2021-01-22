@@ -58,7 +58,7 @@ export const WSubmitButtom = styled.button`
 export const WUserImg = styled.img.attrs((props: any) => ({
     src: props.src ? props.src : "https://fakeimg.pl/250x250/aaa/000/?text=fakeImg",
 }))`
-    border-radius: 50%;
+    // border-radius: 50%;
     height:150px;
     width:150px;
     text-align: center;

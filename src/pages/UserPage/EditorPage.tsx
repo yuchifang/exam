@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from "styled-components"
 import { useParams, Link, RouteComponentProps } from "react-router-dom"
 import axios from "axios"
@@ -88,7 +88,18 @@ const WUserDescriptionTextArea = styled.textarea`
 
 `
 
-
+interface TLocation {
+    // hash: string | undefined
+    // key: string | undefined
+    // pathname: string | undefined
+    // search: string | undefined
+    jwtString: string,
+    name: string,
+    memberId: string,
+    // state?: {
+    //     jwtString: string
+    // } | undefined
+}
 interface EditorPageProps {
     userData?: {
         description: null | string,
@@ -97,28 +108,99 @@ interface EditorPageProps {
         username: string
     }
     EditPageCancel: () => void,
-    EditPageSave: () => void
+    editDom: boolean,
+    setEditDom: React.Dispatch<React.SetStateAction<boolean>>,
+    userId: string,
+    location: TLocation
 }
 
 export const EditorPage: React.FC<EditorPageProps> = ({
     userData,
     EditPageCancel,
-    EditPageSave
+    setEditDom,
+    editDom,
+    userId,
+    location
 }) => {
+    const fileRef = useRef<HTMLInputElement>(null)
+    const usernameRef = useRef<HTMLInputElement>(null)
+    const textAreaRef = useRef<HTMLTextAreaElement>(null)
+    const [url, setUrl] = useState("")
 
+    const EditPageSave = async () => {
+        //-------deal file
+        let fileData: File | undefined
+        if (fileRef.current?.files !== null) {
+            fileData = fileRef.current?.files[0]
+
+            setUrl(URL.createObjectURL(fileData))
+        }
+        const arrayBuffer = await getArrayBuffer(fileData)
+
+        function getArrayBuffer(file: any) {
+            return new Promise((resolve, reject) => {
+                // STEP 3: 轉成 ArrayBuffer, i.e., reader.result
+                const reader = new FileReader();
+                reader.addEventListener('load', () => {
+                    resolve(reader.result);
+                });
+                reader.readAsArrayBuffer(file);
+            })
+        }
+        console.log("arrayBuffer", arrayBuffer)
+
+        const axiosUpdate = async () => {
+            const res = axios.post(`https://weblab-react-special-midtern.herokuapp.com/v1/users/${userId}`, {
+                username: usernameRef?.current?.value,
+                description: textAreaRef?.current?.value,
+
+            })
+        }
+    }
+
+
+    // const arrayBuffer = await getArrayBuffer(fileRef?.current?.files[0]);
+    // console.log('arrayBuffer', arrayBuffer);
+    // const response = await uploadFile(arrayBuffer);
+    // console.log('response', response);
+
+    // function uploadFile(arrayBuffer) {
+    //     return fetch(`https://api.foobar.io`, {
+    //         method: 'POST',
+
+    //         // STEP 6：使用 JSON.stringify() 包起來送出
+    //         body: JSON.stringify({
+    //             appId: 3,
+    //             format: 'png',
+
+    //             // STEP 4：轉成 Uint8Array（這是 TypedArray）
+    //             // STEP 5：透過 Array.from 轉成真正的陣列
+    //             icon: Array.from(new Uint8Array(arrayBuffer)),
+    //         }),
+    //     }).then((res) => {
+    //         if (!res.ok) {
+    //             throw res.statusText;
+    //         }
+    //         return res.json()
+    //     })
+    //         .then(({ data }) => console.log('data', data))
+    //         .catch(err => console.log('err', err))
+    // }
+
+    let imgUrl = url ? url : userData?.picture_url
     return (
         <WUserPageSection>
             <WUserPageContainer>
                 <WUserBlock>
-                    <WUserImgList src={userData?.picture_url} alt="userImg" />
+                    <WUserImgList src={imgUrl} alt="userImg" />
                     <WFileBlock>
-                        <WInputFile type="file" id="file" />
+                        <WInputFile accept="image/*" ref={fileRef} type="file" id="file" />
                         <WLabelFile htmlFor="file" >選擇檔案</WLabelFile>
                         <WWarningSpan>上限300KB</WWarningSpan>
                     </WFileBlock>
-                    <WUserTextInput placeholder={userData?.username} />
+                    <WUserTextInput ref={usernameRef} placeholder={userData?.username} />
                 </WUserBlock>
-                <WUserDescriptionTextArea rows={4} cols={50} placeholder={!!userData?.description ? userData?.description : "type something"} />
+                <WUserDescriptionTextArea ref={textAreaRef} rows={4} cols={50} placeholder={!!userData?.description ? userData?.description : "type something"} />
                 <WButtonBlock>
                     <WEditButton onClick={() => EditPageCancel()}>取消</WEditButton>
                     <WEditButton onClick={() => EditPageSave()}>儲存</WEditButton>
