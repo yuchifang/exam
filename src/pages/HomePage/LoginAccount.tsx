@@ -10,7 +10,7 @@ interface LoginAccountProps extends RouteComponentProps {
 
 interface DecodedData {
     memberId: string,
-    name: string
+    username: string
 }
 
 export const LoginAccount: React.FC<LoginAccountProps> = ({ history, match, location }) => {
@@ -33,14 +33,15 @@ export const LoginAccount: React.FC<LoginAccountProps> = ({ history, match, loca
     const handleSubmit = () => {
         axiosLoginInAccount()
             .then((res) => {
-                console.log("res", res)
                 const jwtString = res.data.result.authToken
                 const decoded: DecodedData = jwtDecode(res.data.result.authToken)
+                console.log("decoded", decoded)
                 const state = {
                     memberId: decoded?.memberId,
-                    name: decoded?.name,
-                    jwtString: jwtString
+                    jwtString: jwtString,
+                    username: decoded?.username
                 }
+                console.log("LoginAccount", state)
                 return state
             })
             .then((res) => {
@@ -59,8 +60,8 @@ export const LoginAccount: React.FC<LoginAccountProps> = ({ history, match, loca
 
     return (
         <>
-            <WInput placeholder="使用者名稱" type="text" ref={passwordRef} />
-            <WInput placeholder="密碼" type="password" ref={nameRef} />
+            <WInput placeholder="使用者名稱" type="text" ref={nameRef} />
+            <WInput placeholder="密碼" type="password" ref={passwordRef} />
             <WSubmitButtom onClick={() => handleSubmit()}>
                 {loginStatus !== "loading" && "登入"}
                 {loginStatus === "loading" && <Spinner size="sm" animation="border" />}

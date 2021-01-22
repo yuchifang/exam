@@ -86,7 +86,7 @@ interface TLocation {
     // pathname: string | undefined
     // search: string | undefined
     jwtString: string,
-    name: string,
+    username: string,
     memberId: string,
     // state?: {
     //     jwtString: string
@@ -117,37 +117,53 @@ export const EditorPage: React.FC<EditorPageProps> = ({
     const fileRef = useRef<HTMLInputElement>(null)
     const usernameRef = useRef<HTMLInputElement>(null)
     const textAreaRef = useRef<HTMLTextAreaElement>(null)
-    const [url, setUrl] = useState("")
+    const [imgUrl, setImgUrl] = useState<string>("")
 
     const EditPageSave = async () => {
         //-------deal file
         let fileData: File | undefined
         if (fileRef.current?.files !== null) {
             fileData = fileRef.current?.files[0]
-
-            setUrl(URL.createObjectURL(fileData))
         }
-        const arrayBuffer = await getArrayBuffer(fileData)
-
-        function getArrayBuffer(file: any) {
+        console.log("fileData", fileData)
+        const dataUrl: any = await getReadAsDataURL(fileData)
+        console.log("arrayBufferURL", dataUrl)
+        function getReadAsDataURL(file: any) {
             return new Promise((resolve, reject) => {
-                // STEP 3: 轉成 ArrayBuffer, i.e., reader.result
                 const reader = new FileReader();
                 reader.addEventListener('load', () => {
                     resolve(reader.result);
                 });
-                reader.readAsArrayBuffer(file);
+                reader.readAsDataURL(file);
             })
         }
-        console.log("arrayBuffer", arrayBuffer)
 
-        const axiosUpdate = async () => {
+        const axiosUpdate = async (arrayBuffer: any) => {
+
             const res = axios.post(`https://weblab-react-special-midtern.herokuapp.com/v1/users/${userId}`, {
                 username: usernameRef?.current?.value,
-                description: textAreaRef?.current?.value,
-
+                description: null,
+                pictureUrl: arrayBuffer
+            }, {
+                headers: {
+                    Authorization: `Bearer ${location.jwtString} `
+                },
             })
+            return res
         }
+        console.log("userId", userId)
+        console.log("location", location)
+        console.log("usernameRef?.current?.value,", usernameRef?.current?.value)
+        console.log("usernameRef?.current?.value,", typeof usernameRef?.current?.value)
+        console.log("textAreaRef?.current?.value", typeof textAreaRef?.current?.value)
+        console.log("dataUrl", dataUrl)
+        axiosUpdate(dataUrl)
+            .then((res) => {
+                console.log("res", res)
+            })
+            .catch((err) => {
+                console.log("err", err)
+            })
     }
 
 
@@ -179,25 +195,31 @@ export const EditorPage: React.FC<EditorPageProps> = ({
     //         .catch(err => console.log('err', err))
     // }
 
-    const handleChange = () => {
+    const handleImgChange = () => {
         let fileData: File | undefined
         if (fileRef.current?.files !== null) {
             if (fileRef.current?.files[0]?.name !== "") {
+
                 fileData = fileRef.current?.files[0]
-                setUrl(URL.createObjectURL(fileData))
+                console.log("fileData", fileData)
+                if (fileData?.size !== undefined && fileData?.size < 300000) {
+                    setImgUrl(URL.createObjectURL(fileData))
+                } else {
+                    alert("上傳失敗　圖片請勿超過３００ＫＢ")
+                }
             }
         }
     }
 
-    let imgUrl = url ? url : userData?.picture_url
-    //onChange 選擇完資料夾　會有感應＼　
+    let userImgUrl = imgUrl ? imgUrl : userData?.picture_url
+
     return (
         <WUserPageSection>
             <WUserPageContainer>
                 <WUserBlock>
-                    <WUserImgList src={imgUrl} alt="userImg" />
+                    <WUserImgList src={userImgUrl} alt="userImg" />
                     <WFileBlock>
-                        <WInputFile onChange={() => handleChange()} accept="image/*" ref={fileRef} type="file" id="file" />
+                        <WInputFile onChange={() => handleImgChange()} accept="image/*" ref={fileRef} type="file" id="file" />
                         <WLabelFile htmlFor="file" >選擇檔案</WLabelFile>
                         <WWarningSpan>上限300KB</WWarningSpan>
                     </WFileBlock>

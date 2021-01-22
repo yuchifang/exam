@@ -67,7 +67,7 @@ interface TLocation {
     // pathname: string | undefined
     // search: string | undefined
     jwtString: string,
-    name: string,
+    username: string,
     memberId: string,
     // state?: {
     //     jwtString: string
@@ -94,7 +94,8 @@ export const UserPage: React.FC<UserPageProps> = ({ history, location, match }) 
 
 
     const { userId } = match.params
-    const userEqualEditor = userId === location.state.memberId && userData?.username === location.state.name
+
+    const userEqualtoEditor = userId === location.state.memberId && userData?.username === location.state.username
     const { state } = location
     // console.log("state", state)
 
@@ -193,7 +194,7 @@ export const UserPage: React.FC<UserPageProps> = ({ history, location, match }) 
                 lightBoxText={lightBoxText}
                 show={showLightBox}
                 closeDeleteLightBox={closeDeleteLightBox}
-                userEqualEditor={userEqualEditor}
+                userEqualEditor={userEqualtoEditor}
                 lightBoxDeleteConfirm={lightBoxDeleteConfirm}
                 lightBoxEditConfirm={lightBoxEditConfirm} />
         </>

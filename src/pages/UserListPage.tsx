@@ -38,7 +38,6 @@ interface TLocation {
     // pathname: string | undefined
     // search: string | undefined
     jwtString: string,
-    name: string,
     memberId: string,
     // state?: {
     //     jwtString: string
@@ -51,9 +50,9 @@ interface TUser {
 }
 
 export const UserListPage: React.FC<UserListPageProps> = ({ history, location }) => {
+    console.log("UserListPAge", location)
     const [userList, setUserList] = useState<TUser[]>([])
-    console.log("location", location)
-    console.log("history", history)
+
     useEffect(() => {
         const axiosGetAllUserList = async () => {
             const res = axios.get("https://weblab-react-special-midtern.herokuapp.com/v1/users/")
