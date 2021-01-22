@@ -23,14 +23,7 @@ const App = () => {
 }
 
 export default App;
-//看看可不可以改改看　HomePage 49 50 的寫法　把Route 放同層
-// UserPage Lightbox render props?
 
-
-
-// home 要跳到　登入登出有問題
-// header 的連接
-// 看看其他的errcode 會不會修正
 
 
 
