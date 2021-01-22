@@ -1,14 +1,8 @@
 
 import React, { useRef, useState, useEffect } from 'react'
 import styled from "styled-components"
-// import { useParams, Link, RouteComponentProps } from "react-router-dom"
-import axios from "axios"
 import { WUserImg, WSubmitButtom, outLineBlue } from "../../styles/General"
 import { useUser } from "../../hook"
-import { RouteComponentProps } from "react-router-dom"
-// import { Modal, Button } from "react-bootstrap";
-// import { LoginOut } from "../Header/LoginOut"
-// import { FirstTopBlock } from "../../components/FirstTopBlock"
 
 const WUserPageSection = styled.section`
     padding-top:100px;

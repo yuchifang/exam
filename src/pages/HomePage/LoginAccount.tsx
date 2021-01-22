@@ -28,10 +28,10 @@ interface LoginAccountProps extends RouteComponentProps {
 
 }
 
-interface DecodedData {
-    memberId: string,
-    username: string
-}
+// interface DecodedData {
+//     memberId: string,
+//     username: string
+// }
 
 export const LoginAccount: React.FC<LoginAccountProps> = ({ history, match, location }) => {
 

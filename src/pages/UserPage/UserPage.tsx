@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from "styled-components"
-import { RouteComponentProps } from "react-router-dom"
-import axios from "axios"
+import { RouteComponentProps, Route } from "react-router-dom"
+import { Spinner, Jumbotron, Container, Row } from "react-bootstrap"
 import { WUserText, WUserImg, WSubmitButtom, outLineBlue } from "../../styles/General"
 import { Modal, Button } from "react-bootstrap";
 import { LoginOut } from "../Header/LoginOut"
@@ -62,17 +62,12 @@ const WDeleteUser = styled.a`
 
 
 interface TLocation {
-    // hash: string | undefined
-    // key: string | undefined
-    // pathname: string | undefined
-    // search: string | undefined
+
     jwtString?: string,
     username: string,
     memberId: string,
     editMode?: boolean,
-    // state?: {
-    //     jwtString: string
-    // } | undefined
+
 }
 interface UserPageProps extends RouteComponentProps<{ userId: string }, {}, TLocation> {
 
@@ -89,11 +84,9 @@ interface UserData {
 export const UserPage: React.FC<UserPageProps> = ({ history, location, match }) => {
     const [showLightBox, setShowLightBox] = useState(false);
     const [editDom, setEditDom] = useState(location?.state?.editMode);
-    // const [userData, setUserData] = useState<UserData>()
-    const [getDataStatus, setGetDataStatus] = useState("idle")
     const [lightBoxText, setLightBoxText] = useState("")
 
-    const { axiosStatus, axiosUserData, errorCode, message, userData, axiosGetSignUserData, axiosDeleteUserData } = useUser()
+    const { axiosStatus, axiosUserData, errorCode, message, userData, axiosGetSigleUserData, axiosDeleteUserData } = useUser()
 
     const { userId } = match.params
 
@@ -101,23 +94,14 @@ export const UserPage: React.FC<UserPageProps> = ({ history, location, match }) 
     const userEqualtoEditor = userId === location.state.memberId
     const { state } = location
     useEffect(() => {
-        axiosGetSignUserData(userId)
+        axiosGetSigleUserData(userId)
 
     }, [userId, editDom])
 
-    console.log("axiosStatus", axiosStatus)
-    console.log([message])
-    console.log(errorCode)
-    console.log("editDom", editDom)
-
     useEffect(() => {
-        console.log("errorCode", errorCode)
         if (axiosStatus === "success") {
-            console.log("success")
-            console.log("userData", userData)
-            console.log([message])
             if (message === "delete the member successfully") {
-                alert("deletesuccess")
+                alert("刪除成功")
                 const locationState = {
                     pathname: "/UserListPage/users",
                     state: axiosUserData
@@ -127,7 +111,7 @@ export const UserPage: React.FC<UserPageProps> = ({ history, location, match }) 
         } else if (axiosStatus === "error") {
             alert("errorCode: " + errorCode + "message: " + message)
         }
-    }, [errorCode])
+    }, [axiosStatus])
 
     const closeDeleteLightBox = () => setShowLightBox(false);
 
@@ -139,27 +123,6 @@ export const UserPage: React.FC<UserPageProps> = ({ history, location, match }) 
     const lightBoxDeleteConfirm = () => {
         setShowLightBox(false)
         axiosDeleteUserData({ userId, jwtString: state.jwtString })
-        //    const location = {
-        //         pathname: "/UserListPage/users",
-        //         state: axiosUserData
-        //     }
-        //     history.push(location)
-        //---------------------
-        // const axiosDeleteData = async () => {
-        //     const res = await axios.delete(`https://weblab-react-special-midtern.herokuapp.com/v1/users/${userId}`, {
-        //         headers: {
-        //             Authorization: `Bearer ${state.jwtString} `
-        //         }
-        //     })
-        //     return res
-        // }
-        // axiosDeleteData()
-        //     .then((res) => {
-        //         console.log("ressss", res)
-        //     })
-        //     .catch((err) => {
-        //         console.log("err", err)
-        //     })
     }
 
     const lightBoxEditConfirm = () => {
@@ -192,7 +155,7 @@ export const UserPage: React.FC<UserPageProps> = ({ history, location, match }) 
     return (
         <>
             <FirstTopBlock />
-            <LoginOut />
+            <Route component={LoginOut} />
             {axiosStatus === "success" && !editDom && <UserPage />}
             {!!editDom &&
                 <EditorPage
@@ -205,7 +168,15 @@ export const UserPage: React.FC<UserPageProps> = ({ history, location, match }) 
 
 
                 />}
-            {getDataStatus === "loading" && <h1>loading</h1>}
+            {axiosStatus === "loading" &&
+                <Container>
+                    <Row className="justify-content-center">
+                        <Jumbotron>
+                            <Spinner size="sm" animation="border" />
+                        </Jumbotron>
+                    </Row>
+                </Container>
+            }
             <LightBox //render props?
                 lightBoxText={lightBoxText}
                 show={showLightBox}

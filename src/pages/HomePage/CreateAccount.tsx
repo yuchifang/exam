@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from 'react'
 import { WInput, WSubmitButtom, WTag } from "../../styles/General"
-import axios from "axios"
 import { RouteComponentProps, Link } from 'react-router-dom'
 import styled from "styled-components"
 import { FirstTopBlock } from "../../components/FirstTopBlock"

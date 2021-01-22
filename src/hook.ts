@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import axios from "axios"
 import jwtDecode from "jwt-decode";
 
@@ -123,7 +123,6 @@ export const useUser = () => {
                     setErrorCode("success no error")
                 })
                 .catch((err) => {
-                    console.log("hooks", err)
                     setAxiosStatus("error")
                     setErrorCode(err)
                 })
@@ -174,7 +173,7 @@ export const useUser = () => {
                     setErrorCode(err)
                 })
         },
-        axiosGetSignUserData: (userId: string) => {
+        axiosGetSigleUserData: (userId: string) => {
             const axiosGetSignUser = async () => {
                 setAxiosStatus("loading")
                 const res = await axios.get(`https://weblab-react-special-midtern.herokuapp.com/v1/users/${userId}`)
@@ -208,7 +207,6 @@ export const useUser = () => {
             }
             axiosDeleteUser()
                 .then((res) => {
-                    console.log("delete 11111")
                     setMessage(res.data.message)
                     setAxiosStatus("success")
                 })
@@ -220,6 +218,30 @@ export const useUser = () => {
                     setErrorCode(err)
                 })
 
+        },
+        axiosGetAllUserData: () => {
+            const axiosGetAllUser = async () => {
+                const res = axios.get("https://weblab-react-special-midtern.herokuapp.com/v1/users/")
+                return res
+            }
+            const res = axiosGetAllUser()
+                .then((res: any) => {
+                    setMessage(res.data.message)
+                    return (res.data.result)
+                }).then((res) => {
+                    setAxiosStatus("success")
+                    return res
+                })
+                .then((res) => {
+                    setErrorCode("success no error")
+                    return res
+                })
+                .catch((err) => {
+                    setAxiosStatus("error")
+                    setErrorCode(err)
+                    return err
+                })
+            return res
         }
 
     }

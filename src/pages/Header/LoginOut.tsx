@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from "styled-components"
 import { outLineBlue, headerBlue } from "../../styles/General"
-import { Link } from "react-router-dom"
+import { Link, RouteComponentProps } from "react-router-dom"
 
 const WHeaderBlock = styled.div`
     width:100%;
@@ -29,17 +29,26 @@ const WLoginButton = styled.button`
     }
 `
 
-interface LoginOutProps {
+const WTitle = styled.div`
+    font-size:16px;
+    color:blue;
+    cursor:pointer;
+`
+interface LoginOutProps extends RouteComponentProps {
 
 }
 
-export const LoginOut: React.FC<LoginOutProps> = () => {
+export const LoginOut: React.FC<LoginOutProps> = ({ history }) => {
+    const handleHomeTitle = () => {
+        history.replace("/UserListPage/users/")
+    }
+    const handleLoginOutButton = () => {
+        history.push("/LoginPage/login")
+    }
     return (
         <WHeaderBlock>
-            <Link to="/UserListPage/users/">Home</Link>
-            <Link to="/LoginPage/login/">
-                <WLoginButton>登出</WLoginButton>
-            </Link>
+            <WTitle onClick={() => handleHomeTitle()}>Home</WTitle>
+            <WLoginButton onClick={() => handleLoginOutButton()}>登出</WLoginButton>
         </WHeaderBlock >
     );
 }

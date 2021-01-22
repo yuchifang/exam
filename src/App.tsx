@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from "react-router-dom"
 import './App.css';
-import { HomePage } from "./pages/HomePage/HomePage"
 import { UserPage } from "./pages/UserPage/UserPage"
 import "./styles/reset.scss"
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -26,12 +25,15 @@ const App = () => {
 export default App;
 //看看可不可以改改看　HomePage 49 50 的寫法　把Route 放同層
 // UserPage Lightbox render props?
-// 刪除功能還沒寫 (如果創新帳號就可以刪了
-// 上傳 有問題 
-// 加入帳號要跳到　編輯頁
+
+
+
 // home 要跳到　登入登出有問題
-// userPage Cuseyom hook 還沒寫
 // header 的連接
+// 看看其他的errcode 會不會修正
+
+
+
 
 // 40  完成所有頁面功能切版與路由
 // 20  UserListPage/UserPage 可以正確顯示使用者資料

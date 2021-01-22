@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { LoginOut } from "../pages/Header/LoginOut"
 import { FirstTopBlock } from "../components/FirstTopBlock"
-import { RouteComponentProps } from 'react-router-dom'
+import { RouteComponentProps, Route } from 'react-router-dom'
 import { WUserText, WUserImg } from "../styles/General"
-import axios from "axios"
 import styled from "styled-components"
+import { useUser } from "../hook"
 
 const WUserListSection = styled.section`
     padding-top:100px;
@@ -45,18 +45,13 @@ interface TUser {
 }
 
 export const UserListPage: React.FC<UserListPageProps> = ({ history, location }) => {
-    console.log("UserListPAge", location)
+    const { axiosGetAllUserData } = useUser()
     const [userList, setUserList] = useState<TUser[]>([])
 
     useEffect(() => {
-        const axiosGetAllUserList = async () => {
-            const res = axios.get("https://weblab-react-special-midtern.herokuapp.com/v1/users/")
-            return res
-        }
-        axiosGetAllUserList()
+        axiosGetAllUserData()
             .then((res: any) => {
-                // console.log("UserListPage", res.data.result)
-                setUserList(res.data.result)
+                setUserList(res)
             }).catch((err) => {
                 console.log(err)
             })
@@ -69,12 +64,10 @@ export const UserListPage: React.FC<UserListPageProps> = ({ history, location })
         }
         history.push(locationUseList)
     }
-    // console.log("userList", userList);
-    // console.log(history)
     return (
         <>
             <FirstTopBlock />
-            <LoginOut />
+            <Route component={LoginOut} />
             <WUserListSection>
                 <WUserListContainer>
                     {
