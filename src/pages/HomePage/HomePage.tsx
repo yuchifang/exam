@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from "styled-components"
 import { WTag } from "../../styles/General"
-import { Switch, Route, Link } from "react-router-dom"
+import { BrowserRouter, Switch, Route, Link } from "react-router-dom"
 import { LoginAccount } from "./LoginAccount"
 import { CreateAccount } from "./CreateAccount"
 import { FirstTopBlock } from "../../components/FirstTopBlock"
@@ -33,6 +33,7 @@ interface LoginPageProps {
 export const HomePage: React.FC<LoginPageProps> = () => {
     return (
         <>
+            {/* <BrowserRouter> */}
             <FirstTopBlock />
             <LoginIn />
             <WLoginSection>
@@ -51,6 +52,7 @@ export const HomePage: React.FC<LoginPageProps> = () => {
                     </Switch>
                 </WLoginContainer>
             </WLoginSection>
+            {/* </BrowserRouter> */}
         </>
     );
 }
