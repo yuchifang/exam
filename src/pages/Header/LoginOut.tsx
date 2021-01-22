@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from "styled-components"
-import { outLineBlue, headerBlue, baseGray } from "../../styles/General"
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom"
+import { outLineBlue, headerBlue } from "../../styles/General"
+import { Link } from "react-router-dom"
 
 const WHeaderBlock = styled.div`
     width:100%;
@@ -33,7 +33,7 @@ interface LoginOutProps {
 
 }
 
-export const LoginOut: React.FC<LoginOutProps> = ({ }) => {
+export const LoginOut: React.FC<LoginOutProps> = () => {
     return (
         <WHeaderBlock>
             <Link to="/UserListPage/users/">Home</Link>

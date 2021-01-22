@@ -12,7 +12,7 @@ interface FirstTopBlockProps {
 
 }
 
-export const FirstTopBlock: React.FC<FirstTopBlockProps> = ({ }) => {
+export const FirstTopBlock: React.FC<FirstTopBlockProps> = () => {
     return (
         <StyledFirstTopBlock />
     );

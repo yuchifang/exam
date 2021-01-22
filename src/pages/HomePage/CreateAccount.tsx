@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useRef } from 'react'
 import { WInput, WSubmitButtom } from "../../styles/General"
 import axios from "axios"
 interface CreateAccountProps {
 
 }
 
-export const CreateAccount: React.FC<CreateAccountProps> = ({ }) => {
+export const CreateAccount: React.FC<CreateAccountProps> = () => {
 
     const emailRef = useRef<HTMLInputElement>(null)
     const passwordRef = useRef<HTMLInputElement>(null)

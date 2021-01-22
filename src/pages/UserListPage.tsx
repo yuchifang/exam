@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { LoginOut } from "../pages/Header/LoginOut"
 import { FirstTopBlock } from "../components/FirstTopBlock"
-import { BrowserRouter, Switch, Route, Link, RouteComponentProps, useLocation } from 'react-router-dom'
+import { RouteComponentProps } from 'react-router-dom'
 import { WUserText, WUserImg } from "../styles/General"
 import axios from "axios"
 import styled from "styled-components"
-import { Location } from "history"
 
 const WUserListSection = styled.section`
     padding-top:100px;

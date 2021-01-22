@@ -3,7 +3,7 @@ import { WInput, WSubmitButtom } from "../../styles/General"
 import axios from "axios"
 import jwtDecode from "jwt-decode";
 import { Spinner } from "react-bootstrap";
-import { RouteComponentProps, Redirect } from "react-router-dom"
+import { RouteComponentProps } from "react-router-dom"
 interface LoginAccountProps extends RouteComponentProps {
 
 }

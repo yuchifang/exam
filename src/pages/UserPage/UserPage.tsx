@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from "styled-components"
-import { useParams, Link, RouteComponentProps } from "react-router-dom"
+import { RouteComponentProps } from "react-router-dom"
 import axios from "axios"
 import { WUserText, WUserImg, WSubmitButtom, outLineBlue } from "../../styles/General"
 import { Modal, Button } from "react-bootstrap";
@@ -59,35 +59,7 @@ const WDeleteUser = styled.a`
         cursor:pointer;
     }
 `
-const WFileBlock = styled.div`
-    display:flex;
-    align-items: baseline;    
-`
 
-const WWarningSpan = styled.span`
-    margin-left:10px;
-`
-
-const WInputFile = styled.input`
-    position: absolute;
-    left: 0;
-    top: 0;
-    opacity: 0;
-`
-
-const WLabelFile = styled.label`
-    border: solid #222 1px;
-    padding:5px 8px;
-    border-radius: 5px; 
-    cursor:pointer;
-`
-
-const WUserTextInput = styled.input`
-
-`
-const WUserDescriptionTextArea = styled.textarea`
-
-`
 
 interface TLocation {
     // hash: string | undefined
@@ -145,7 +117,7 @@ export const UserPage: React.FC<UserPageProps> = ({ history, location, match }) 
                 console.log(err)
             })
 
-    }, [])
+    }, [userId])
 
     const closeDeleteLightBox = () => setShowLightBox(false);
 

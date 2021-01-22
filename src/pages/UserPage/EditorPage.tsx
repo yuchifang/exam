@@ -1,12 +1,12 @@
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import styled from "styled-components"
-import { useParams, Link, RouteComponentProps } from "react-router-dom"
+// import { useParams, Link, RouteComponentProps } from "react-router-dom"
 import axios from "axios"
-import { WUserText, WUserImg, WSubmitButtom, outLineBlue } from "../../styles/General"
-import { Modal, Button } from "react-bootstrap";
-import { LoginOut } from "../Header/LoginOut"
-import { FirstTopBlock } from "../../components/FirstTopBlock"
+import { WUserImg, WSubmitButtom, outLineBlue } from "../../styles/General"
+// import { Modal, Button } from "react-bootstrap";
+// import { LoginOut } from "../Header/LoginOut"
+// import { FirstTopBlock } from "../../components/FirstTopBlock"
 
 const WUserPageSection = styled.section`
     padding-top:100px;
@@ -33,9 +33,7 @@ const WUserBlock = styled.figure`
     flex-direction: column;
 `
 
-const WUserDescription = styled.article`
-    font-size:16px;
-`
+
 
 const WButtonBlock = styled.div`
 
@@ -51,13 +49,7 @@ const WEditButton = styled(WSubmitButtom)`
     }
 `
 
-const WDeleteUser = styled.a`
-    color:red;
-    &:hover {
-        color:red;
-        cursor:pointer;
-    }
-`
+
 const WFileBlock = styled.div`
     display:flex;
     align-items: baseline;    
@@ -187,14 +179,25 @@ export const EditorPage: React.FC<EditorPageProps> = ({
     //         .catch(err => console.log('err', err))
     // }
 
+    const handleChange = () => {
+        let fileData: File | undefined
+        if (fileRef.current?.files !== null) {
+            if (fileRef.current?.files[0]?.name !== "") {
+                fileData = fileRef.current?.files[0]
+                setUrl(URL.createObjectURL(fileData))
+            }
+        }
+    }
+
     let imgUrl = url ? url : userData?.picture_url
+    //onChange 選擇完資料夾　會有感應＼　
     return (
         <WUserPageSection>
             <WUserPageContainer>
                 <WUserBlock>
                     <WUserImgList src={imgUrl} alt="userImg" />
                     <WFileBlock>
-                        <WInputFile accept="image/*" ref={fileRef} type="file" id="file" />
+                        <WInputFile onChange={() => handleChange()} accept="image/*" ref={fileRef} type="file" id="file" />
                         <WLabelFile htmlFor="file" >選擇檔案</WLabelFile>
                         <WWarningSpan>上限300KB</WWarningSpan>
                     </WFileBlock>
