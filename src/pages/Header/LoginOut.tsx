@@ -39,11 +39,20 @@ interface LoginOutProps extends RouteComponentProps {
 }
 
 export const LoginOut: React.FC<LoginOutProps> = ({ history }) => {
+    console.log("history", history)
     const handleHomeTitle = () => {
-        history.replace("/UserListPage/users/")
+        const locationState = {
+            pathname: "/UserListPage/users/",
+            state: history.location.state
+        }
+        history.push(locationState)
     }
     const handleLoginOutButton = () => {
-        history.push("/LoginPage/login")
+        const locationState = {
+            pathname: "/LoginPage/login",
+            state: undefined
+        }
+        history.push(locationState)
     }
     return (
         <WHeaderBlock>

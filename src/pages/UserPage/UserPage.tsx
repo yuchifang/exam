@@ -139,9 +139,9 @@ export const UserPage: React.FC<UserPageProps> = ({ history, location, match }) 
             <WUserPageContainer>
                 <WUserBlock>
                     <WUserImgList src={userData?.picture_url} alt="userImg" />
-                    <WUserText>{userData?.username}</WUserText>
+                    <WUserText>username__{userData?.username}</WUserText>
                 </WUserBlock>
-                <WUserDescription>
+                <WUserDescription>description__
                     {!!userData?.description === false && "no description here"}
                     {!!userData?.description === true && userData?.description}
                 </WUserDescription>

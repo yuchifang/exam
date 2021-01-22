@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { LoginOut } from "../pages/Header/LoginOut"
+import { LoginIn } from "../pages/Header/LoginIn"
 import { FirstTopBlock } from "../components/FirstTopBlock"
 import { RouteComponentProps, Route } from 'react-router-dom'
 import { WUserText, WUserImg } from "../styles/General"
@@ -45,7 +46,7 @@ interface TUser {
 }
 
 export const UserListPage: React.FC<UserListPageProps> = ({ history, location }) => {
-    const { axiosGetAllUserData } = useUser()
+    const { axiosUserData, axiosGetAllUserData } = useUser()
     const [userList, setUserList] = useState<TUser[]>([])
 
     useEffect(() => {
@@ -55,19 +56,26 @@ export const UserListPage: React.FC<UserListPageProps> = ({ history, location })
             }).catch((err) => {
                 console.log(err)
             })
-    }, [])
+    }, [axiosUserData])
 
     const handleUserBlockClick = (id: string) => {
-        const locationUseList = {
-            pathname: `/UserPage/users/${id}`,
-            state: location.state,
+        if (location.state !== undefined) {
+
+            const locationUseList = {
+                pathname: `/UserPage/users/${id}`,
+                state: location.state,
+            }
+            history.push(locationUseList)
+        } else {
+            alert("請先登入")
         }
-        history.push(locationUseList)
     }
+
     return (
         <>
             <FirstTopBlock />
-            <Route component={LoginOut} />
+            {location.state === undefined && <Route component={LoginIn} />}
+            {(location.state !== undefined) && <Route component={LoginOut} />}
             <WUserListSection>
                 <WUserListContainer>
                     {

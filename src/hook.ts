@@ -76,7 +76,8 @@ export const useUser = () => {
                     return locationState
                 })
                 .then((res) => {
-                    setAxiosUserData(res)
+                    console.log("res", res)
+                    setAxiosUserData({ ...res })
                 })
                 .then((res) => {
                     setAxiosStatus("success")
