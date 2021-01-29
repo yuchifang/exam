@@ -91,7 +91,7 @@ interface EditorPageProps {
         picture_url: string
         username: string
     }
-    EditPageCancel: () => void,
+    cancelEditPage: () => void,
     editDom: boolean | undefined,
     setEditDom: React.Dispatch<React.SetStateAction<boolean | undefined>>,
     userId: string,
@@ -100,7 +100,7 @@ interface EditorPageProps {
 
 export const EditorPage: React.FC<EditorPageProps> = ({
     userData,
-    EditPageCancel,
+    cancelEditPage,
     setEditDom,
     editDom,
     userId,
@@ -168,7 +168,12 @@ export const EditorPage: React.FC<EditorPageProps> = ({
                 <WUserBlock>
                     <WUserImgList src={userImgUrl} alt="userImg" />
                     <WFileBlock>
-                        <WInputFile onChange={() => handleImgChange()} accept="image/*" ref={fileRef} type="file" id="file" />
+                        <WInputFile
+                            onChange={() => handleImgChange()}
+                            accept="image/*"
+                            ref={fileRef}
+                            type="file"
+                            id="file" />
                         <WLabelFile htmlFor="file" >選擇檔案</WLabelFile>
                         <WWarningSpan>上限300KB</WWarningSpan>
                     </WFileBlock>
@@ -176,7 +181,7 @@ export const EditorPage: React.FC<EditorPageProps> = ({
                 </WUserBlock>
                 <WUserDescriptionTextArea ref={textAreaRef} rows={4} cols={50} placeholder={!!userData?.description ? userData?.description : "type something"} />
                 <WButtonBlock>
-                    <WEditButton onClick={() => EditPageCancel()}>取消</WEditButton>
+                    <WEditButton onClick={() => cancelEditPage()}>取消</WEditButton>
                     <WEditButton onClick={() => EditPageSave()}>儲存</WEditButton>
                 </WButtonBlock>
             </WUserPageContainer>

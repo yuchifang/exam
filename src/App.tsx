@@ -12,7 +12,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <Switch>
-        {/* <Route path="/" component={HomePage} /> */}
+        <Route exact path="/" component={UserListPage} />
         <Route path="/LoginPage/login" component={LoginAccount} />
         <Route path="/SignupPage/signup" component={CreateAccount} />
         <Route exact path="/UserListPage/users" component={UserListPage} />
@@ -24,7 +24,10 @@ const App = () => {
 
 export default App;
 
-
+// home 有東西 1
+// 沒登入的情況 可以點選 userPage 的東西 
+// 搜尋功能 1
+// customHook 狀態確認 1
 
 
 

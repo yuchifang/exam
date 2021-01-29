@@ -82,21 +82,22 @@ interface UserData {
 
 
 export const UserPage: React.FC<UserPageProps> = ({ history, location, match }) => {
-    const [showLightBox, setShowLightBox] = useState(false);
-    const [editDom, setEditDom] = useState(location?.state?.editMode);
-    const [lightBoxText, setLightBoxText] = useState("")
+    const [lightBoxStatus, setLightBoxStatus] = useState(false);
+    const [editStatus, setEditStatus] = useState(location?.state?.editMode);
+    const [lightBoxButtonText, setLightBoxButtonText] = useState("")
 
     const { axiosStatus, axiosUserData, errorCode, message, userData, axiosGetSigleUserData, axiosDeleteUserData } = useUser()
 
     const { userId } = match.params
 
 
-    const userEqualtoEditor = userId === location.state.memberId
+    const editAuthority = userId === location.state.memberId
     const { state } = location
+
     useEffect(() => {
         axiosGetSigleUserData(userId)
 
-    }, [userId, editDom])
+    }, [userId, editStatus])
 
     useEffect(() => {
         if (axiosStatus === "success") {
@@ -113,25 +114,30 @@ export const UserPage: React.FC<UserPageProps> = ({ history, location, match }) 
         }
     }, [axiosStatus])
 
-    const closeDeleteLightBox = () => setShowLightBox(false);
+    const closeLightBox = () => setLightBoxStatus(false);
 
     const openLightBox = (text: string) => {
-        setShowLightBox(true)
-        setLightBoxText(text)
+        if (editAuthority && text === "編輯") {
+            setEditStatus(true)
+        } else {
+            setLightBoxStatus(true)
+            setLightBoxButtonText(text)
+        }
+
     }
 
-    const lightBoxDeleteConfirm = () => {
-        setShowLightBox(false)
+    const lightBoxCancelConfirm = () => {
+        setLightBoxStatus(false)
         axiosDeleteUserData({ userId, jwtString: state.jwtString })
     }
 
     const lightBoxEditConfirm = () => {
-        setShowLightBox(false)
-        setEditDom(true)
+        setLightBoxStatus(false)
+        setEditStatus(true)
     }
 
-    const EditPageCancel = () => {
-        setEditDom(false)
+    const cancelEditPage = () => {
+        setEditStatus(false)
     }
 
     const UserPage = () => <>
@@ -146,24 +152,28 @@ export const UserPage: React.FC<UserPageProps> = ({ history, location, match }) 
                     {!!userData?.description === true && userData?.description}
                 </WUserDescription>
                 <WButtonBlock>
+                    {/* 下次遇到可以考慮用disable 來控制 */}
                     <WEditButton onClick={() => openLightBox("編輯")}>編輯</WEditButton>
                     <WDeleteUser onClick={() => openLightBox("刪除")}>刪除此使用者</WDeleteUser>
                 </WButtonBlock>
             </WUserPageContainer>
         </WUserPageSection>
     </>
+
+
     return (
         <>
             <FirstTopBlock />
             <Route component={LoginOut} />
-            {axiosStatus === "success" && !editDom && <UserPage />}
-            {!!editDom &&
+            {axiosStatus === "success" && !editStatus && <UserPage />}
+
+            {axiosStatus === "success" && !!editStatus &&
                 <EditorPage
                     userId={userId}
                     userData={userData}
-                    EditPageCancel={EditPageCancel}
-                    editDom={editDom}
-                    setEditDom={setEditDom}
+                    cancelEditPage={cancelEditPage}
+                    editDom={editStatus}
+                    setEditDom={setEditStatus}
                     editorLocation={state}
 
 
@@ -171,43 +181,46 @@ export const UserPage: React.FC<UserPageProps> = ({ history, location, match }) 
             {axiosStatus === "loading" &&
                 <Container>
                     <Row className="justify-content-center">
-                        <Jumbotron>
-                            <Spinner size="sm" animation="border" />
-                        </Jumbotron>
+                        <Spinner size="sm" animation="border" />
                     </Row>
                 </Container>
             }
             <LightBox //render props?
-                lightBoxText={lightBoxText}
-                show={showLightBox}
-                closeDeleteLightBox={closeDeleteLightBox}
-                userEqualEditor={userEqualtoEditor}
-                lightBoxDeleteConfirm={lightBoxDeleteConfirm}
+                lightBoxText={lightBoxButtonText}
+                show={lightBoxStatus}
+                closeLightBox={closeLightBox}
+                editAuthority={editAuthority}
+                lightBoxDeleteConfirm={lightBoxCancelConfirm}
                 lightBoxEditConfirm={lightBoxEditConfirm} />
+
         </>
     );
 }
 
-const LightBox = ({ lightBoxText, show, userEqualEditor, closeDeleteLightBox, lightBoxDeleteConfirm, lightBoxEditConfirm }:
+const LightBox = ({ lightBoxText, show, editAuthority, closeLightBox: closeDeleteLightBox, lightBoxDeleteConfirm, lightBoxEditConfirm }:
     {
         lightBoxText: string,
         show: boolean,
-        userEqualEditor: boolean,
-        closeDeleteLightBox: () => void,
+        editAuthority: boolean,
+        closeLightBox: () => void,
         lightBoxDeleteConfirm: () => void,
         lightBoxEditConfirm: () => void,
     }) => (
     <Modal show={show} onHide={closeDeleteLightBox}>
         <Modal.Header closeButton>
-            {userEqualEditor && <Modal.Title>{lightBoxText}此使用者</Modal.Title>}
-            {!userEqualEditor && <Modal.Title>你非此使用者　無法{lightBoxText}</Modal.Title>}
+            {editAuthority && <Modal.Title>{lightBoxText}此使用者</Modal.Title>}
+            {!editAuthority && <Modal.Title>你非此使用者　無法{lightBoxText}</Modal.Title>}
         </Modal.Header>
         <Modal.Footer>
             <Button variant="secondary" onClick={closeDeleteLightBox}>取消</Button>
-            {userEqualEditor && lightBoxText === "刪除" &&
-                < Button variant="danger" onClick={lightBoxDeleteConfirm}>確認</Button>}
-            {userEqualEditor && lightBoxText === "編輯" &&
-                < Button variant="danger" onClick={lightBoxEditConfirm}>確認</Button>}
+            {
+                editAuthority && lightBoxText === "刪除" &&
+                < Button variant="danger" onClick={lightBoxDeleteConfirm}>確認</Button>
+            }
+            {
+                editAuthority && lightBoxText === "編輯" &&
+                < Button variant="danger" onClick={lightBoxEditConfirm}>確認</Button>
+            }
         </Modal.Footer>
     </Modal >
 )

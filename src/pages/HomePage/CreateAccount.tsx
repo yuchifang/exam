@@ -51,7 +51,7 @@ export const CreateAccount: React.FC<CreateAccountProps> = ({ history }) => {
 
     }, [errorCode])
 
-    const handleSubmit = () => {
+    const handleSubmit = () => {//創一個帳號 render 5次???
         let email: string
         let username: string
         let password: string

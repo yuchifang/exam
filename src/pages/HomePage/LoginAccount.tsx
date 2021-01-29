@@ -28,11 +28,6 @@ interface LoginAccountProps extends RouteComponentProps {
 
 }
 
-// interface DecodedData {
-//     memberId: string,
-//     username: string
-// }
-
 export const LoginAccount: React.FC<LoginAccountProps> = ({ history, match, location }) => {
 
     const passwordRef = useRef<HTMLInputElement>(null)
@@ -50,7 +45,6 @@ export const LoginAccount: React.FC<LoginAccountProps> = ({ history, match, loca
             alert("errorCode: " + errorCode + "message: " + message)
         }
 
-
     }, [errorCode])
 
     const handleSubmit = () => {
@@ -64,6 +58,7 @@ export const LoginAccount: React.FC<LoginAccountProps> = ({ history, match, loca
             alert("使用者名稱　密碼　不能為空白")
         }
     }
+
     return (
         <>
             <FirstTopBlock />

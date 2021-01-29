@@ -39,7 +39,6 @@ interface LoginOutProps extends RouteComponentProps {
 }
 
 export const LoginOut: React.FC<LoginOutProps> = ({ history }) => {
-    console.log("history", history)
     const handleHomeTitle = () => {
         const locationState = {
             pathname: "/UserListPage/users/",
@@ -54,6 +53,9 @@ export const LoginOut: React.FC<LoginOutProps> = ({ history }) => {
         }
         history.push(locationState)
     }
+
+    console.log("history", history)
+
     return (
         <WHeaderBlock>
             <WTitle onClick={() => handleHomeTitle()}>Home</WTitle>

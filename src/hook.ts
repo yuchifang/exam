@@ -38,16 +38,18 @@ interface UserData {
 }
 
 export const useUser = () => {
+    //下次不要這樣包...
+    //下次errorCode 可以考慮用 Return 的方式取得 不然render 太多次了
     const [axiosStatus, setAxiosStatus] = useState("idle")
     const [axiosUserData, setAxiosUserData] = useState<LocationStateData>()
     const [errorCode, setErrorCode] = useState("")
     const [message, setMessage] = useState("")
     const [userData, setUserData] = useState<UserData>()
+    const [userListData, setUserListData] = useState<UserData[]>()
 
-    // console.log("errorCode", errorCode)
-    // console.log("axiosStatus", axiosStatus)
-    // console.log("message", message)
+
     return {
+        userListData,
         axiosStatus,
         axiosUserData,
         errorCode,
@@ -68,6 +70,7 @@ export const useUser = () => {
                     setMessage(res.data.message)
                     const jwtString = res.data.result.authToken
                     const decoded: LocationStateData = jwtDecode(res.data.result.authToken)
+                    console.log("decoded", decoded)
                     const locationState = {
                         memberId: decoded?.memberId,
                         jwtString: jwtString,
@@ -76,7 +79,6 @@ export const useUser = () => {
                     return locationState
                 })
                 .then((res) => {
-                    console.log("res", res)
                     setAxiosUserData({ ...res })
                 })
                 .then((res) => {
@@ -107,6 +109,7 @@ export const useUser = () => {
                     setMessage(res.data.message)
                     const jwtString = res.data.result.authToken
                     const decoded: LocationStateData = jwtDecode(res.data.result.authToken)
+                    console.log("decoded", decoded)
                     const locationState = {
                         memberId: decoded?.memberId,
                         jwtString: jwtString,
@@ -183,9 +186,10 @@ export const useUser = () => {
             axiosGetSignUser()
                 .then((res) => {
                     setMessage(res.data.message)
-                    setUserData(res.data.result)
+                    return res
                 })
-                .then(() => {
+                .then((res) => {
+                    setUserData(res.data.result)
                     setAxiosStatus("success")
                 })
                 .then(() => {
@@ -221,28 +225,29 @@ export const useUser = () => {
 
         },
         axiosGetAllUserData: () => {
+            setAxiosStatus("loading")
             const axiosGetAllUser = async () => {
                 const res = axios.get("https://weblab-react-special-midtern.herokuapp.com/v1/users/")
                 return res
             }
-            const res = axiosGetAllUser()
+            axiosGetAllUser()
                 .then((res: any) => {
                     setMessage(res.data.message)
-                    return (res.data.result)
-                }).then((res) => {
+                    setUserListData(res.data.result)
+                }).then(() => {
                     setAxiosStatus("success")
-                    return res
+
                 })
-                .then((res) => {
+                .then(() => {
                     setErrorCode("success no error")
-                    return res
+
                 })
                 .catch((err) => {
                     setAxiosStatus("error")
                     setErrorCode(err)
-                    return err
+
                 })
-            return res
+
         }
 
     }
