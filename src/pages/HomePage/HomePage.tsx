@@ -5,7 +5,7 @@ import { Switch, Route, Link } from "react-router-dom"
 import { LoginAccount } from "./LoginAccount"
 import { CreateAccount } from "./CreateAccount"
 import { FirstTopBlock } from "../../components/FirstTopBlock"
-import { LoginIn } from "../Header/LoginIn"
+import { Login } from "../Header/Login"
 
 
 const WLoginSection = styled.section`
@@ -35,7 +35,7 @@ export const HomePage: React.FC<LoginPageProps> = () => {
         <>
             {/* <BrowserRouter> */}
             <FirstTopBlock />
-            <LoginIn />
+            <Login />
             <WLoginSection>
                 <WLoginContainer>
                     <WTagBlock>

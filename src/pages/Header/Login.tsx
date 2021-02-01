@@ -33,7 +33,7 @@ interface LoginInProps {
 }
 
 
-export const LoginIn: React.FC<LoginInProps> = () => {
+export const Login: React.FC<LoginInProps> = () => {
     return (
         <WHeaderBlock>
             <Link to="/UserListPage/users/">Home</Link>

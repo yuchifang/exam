@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Switch, Route } from "react-router-dom"
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom"
 import './App.css';
 import { UserPage } from "./pages/UserPage/UserPage"
 import "./styles/reset.scss"
@@ -17,6 +17,7 @@ const App = () => {
         <Route path="/SignupPage/signup" component={CreateAccount} />
         <Route exact path="/UserListPage/users" component={UserListPage} />
         <Route exact path="/UserPage/users/:userId" component={UserPage} />
+        <Redirect to="/" />
       </Switch>
     </BrowserRouter>
   );

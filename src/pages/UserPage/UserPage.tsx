@@ -4,7 +4,7 @@ import { RouteComponentProps, Route } from "react-router-dom"
 import { Spinner, Jumbotron, Container, Row } from "react-bootstrap"
 import { WUserText, WUserImg, WSubmitButtom, outLineBlue } from "../../styles/General"
 import { Modal, Button } from "react-bootstrap";
-import { LoginOut } from "../Header/LoginOut"
+import { Logout } from "../Header/Logout"
 import { FirstTopBlock } from "../../components/FirstTopBlock"
 import { EditorPage } from "./EditorPage"
 import { useUser } from "../../hook"
@@ -164,7 +164,7 @@ export const UserPage: React.FC<UserPageProps> = ({ history, location, match }) 
     return (
         <>
             <FirstTopBlock />
-            <Route component={LoginOut} />
+            <Route component={Logout} />
             {axiosStatus === "success" && !editStatus && <UserPage />}
 
             {axiosStatus === "success" && !!editStatus &&

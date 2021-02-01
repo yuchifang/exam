@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { baseGray } from "../styles/General"
-import { LoginOut } from "../pages/Header/LoginOut"
-import { LoginIn } from "../pages/Header/LoginIn"
+import { Logout } from "./Header/Logout"
+import { Login } from "./Header/Login"
 import { FirstTopBlock } from "../components/FirstTopBlock"
 import { RouteComponentProps, Route } from 'react-router-dom'
 import { WUserText, WUserImg } from "../styles/General"
@@ -70,9 +70,9 @@ interface TUser {
 }
 
 export const UserListPage: React.FC<UserListPageProps> = ({ history, location }) => {
-    const { axiosGetAllUserData, axiosStatus, userListData } = useUser()
+    const { axiosGetAllUserData, axiosStatus, axiosUserListData } = useUser()
     const [seachValue, setSeachValue] = useState<string>("")
-    const [userList, setUserList] = useState<TUser[] | undefined>(userListData)
+    const [userList, setUserList] = useState<TUser[] | undefined>(axiosUserListData)
 
     useEffect(() => { //執行api
         //抓一次資料 會render 6~7次
@@ -80,8 +80,8 @@ export const UserListPage: React.FC<UserListPageProps> = ({ history, location })
     }, [])
 
     useEffect(() => { //將api 的值setUserList
-        setUserList(userListData)
-    }, [userListData])
+        setUserList(axiosUserListData)
+    }, [axiosUserListData])
 
     useEffect(() => { //搜尋功能 如果沒有搜尋Input 為空 則set原本api的資料
         //每search render 2次
@@ -96,7 +96,7 @@ export const UserListPage: React.FC<UserListPageProps> = ({ history, location })
                 setUserList(searchResult)
             }
         } else {
-            setUserList(userListData)
+            setUserList(axiosUserListData)
         }
     }, [seachValue])
 
@@ -117,11 +117,15 @@ export const UserListPage: React.FC<UserListPageProps> = ({ history, location })
         }
     }
 
+    const Pagination = ({ arrayItem, onePageNumber }: { arrayItem: TUser[] | undefined, onePageNumber: number }) => {
+        return <h1>SSSS</h1>
+    }
+
     return (
         <>
             <FirstTopBlock />
-            {location.state === undefined && <Route component={LoginIn} />}
-            {(location.state !== undefined) && <Route component={LoginOut} />}
+            {location.state === undefined && <Route component={Login} />}
+            {(location.state !== undefined) && <Route component={Logout} />}
             <WUserListSection>
                 <WInputBlock >
                     <WSearchText>
@@ -149,6 +153,7 @@ export const UserListPage: React.FC<UserListPageProps> = ({ history, location })
                             <Spinner size="sm" animation="border" />
                         </Row>
                     </Container>}
+                <Pagination arrayItem={userList} onePageNumber={9} />
             </WUserListSection >
         </>
 

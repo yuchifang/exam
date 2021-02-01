@@ -34,11 +34,13 @@ const WTitle = styled.div`
     color:blue;
     cursor:pointer;
 `
+
+// const 
 interface LoginOutProps extends RouteComponentProps {
 
 }
 
-export const LoginOut: React.FC<LoginOutProps> = ({ history }) => {
+export const Logout: React.FC<LoginOutProps> = ({ history }) => {
     const handleHomeTitle = () => {
         const locationState = {
             pathname: "/UserListPage/users/",
@@ -54,7 +56,6 @@ export const LoginOut: React.FC<LoginOutProps> = ({ history }) => {
         history.push(locationState)
     }
 
-    console.log("history", history)
 
     return (
         <WHeaderBlock>

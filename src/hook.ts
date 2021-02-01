@@ -45,11 +45,11 @@ export const useUser = () => {
     const [errorCode, setErrorCode] = useState("")
     const [message, setMessage] = useState("")
     const [userData, setUserData] = useState<UserData>()
-    const [userListData, setUserListData] = useState<UserData[]>()
+    const [axiosUserListData, setAxiosUserListData] = useState<UserData[]>()
 
 
     return {
-        userListData,
+        axiosUserListData,
         axiosStatus,
         axiosUserData,
         errorCode,
@@ -233,7 +233,7 @@ export const useUser = () => {
             axiosGetAllUser()
                 .then((res: any) => {
                     setMessage(res.data.message)
-                    setUserListData(res.data.result)
+                    setAxiosUserListData(res.data.result)
                 }).then(() => {
                     setAxiosStatus("success")
 
