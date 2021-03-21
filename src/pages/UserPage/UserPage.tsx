@@ -5,7 +5,7 @@ import { Jumbotron, Container, Row } from "react-bootstrap"
 import { WUserText, WUserImg, WSubmitButton, outLineBlue } from "../../styles/General"
 import { Modal, Button } from "react-bootstrap";
 import { Logout } from "../Header/Logout"
-import { FirstTopBlock } from "../../components/FirstTopBlock"
+import { WWebTopBlock } from "../../components/WebTopBlock"
 import { EditorPage } from "./EditorPage"
 import { useUser } from "../../hook"
 import Spinner from '../../components/Spinner'
@@ -104,7 +104,7 @@ export const UserPage: React.FC<UserPageProps> = ({ history, location, match }) 
 
     return (
         <>
-            <FirstTopBlock />
+            <WWebTopBlock />
             <Route component={Logout} />
             {axiosStatus === "success" && !editStatus && <UserPage />}
 

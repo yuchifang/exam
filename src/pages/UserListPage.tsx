@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { baseGray } from "../styles/General"
 import { Logout } from "./Header/Logout"
 import { Login } from "./Header/Login"
-import { FirstTopBlock } from "../components/FirstTopBlock"
+import { WWebTopBlock } from "../components/WebTopBlock"
 import { RouteComponentProps, Route } from 'react-router-dom'
 import { WUserText, WUserImg } from "../styles/General"
 import styled from "styled-components"
@@ -83,7 +83,7 @@ export const UserListPage: React.FC<UserListPageProps> = ({ history, location })
 
     return (
         <>
-            <FirstTopBlock />
+            <WWebTopBlock />
             {location.state === undefined && <Route component={Login} />}
             {(location.state !== undefined) && <Route component={Logout} />}
             <WUserListSection>
