@@ -1,65 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import styled from "styled-components"
 import { RouteComponentProps, Route } from "react-router-dom"
-import { Spinner, Jumbotron, Container, Row } from "react-bootstrap"
-import { WUserText, WUserImg, WSubmitButtom, outLineBlue } from "../../styles/General"
+import { Jumbotron, Container, Row } from "react-bootstrap"
+import { WUserText, WUserImg, WSubmitButton, outLineBlue } from "../../styles/General"
 import { Modal, Button } from "react-bootstrap";
 import { Logout } from "../Header/Logout"
 import { FirstTopBlock } from "../../components/FirstTopBlock"
 import { EditorPage } from "./EditorPage"
 import { useUser } from "../../hook"
-
-const WUserPageSection = styled.section`
-    padding-top:100px;
-    padding-bottom:100px;
-`
-
-const WUserPageContainer = styled.div`
-    display:flex;
-    justify-content: center;
-    max-width:1000px;
-    margin:auto;
-    flex-direction: column;
-    align-items: center;
-    padding: 0 150px;
-`
-
-const WUserImgList = styled(WUserImg)`
-    margin: 0 auto 20px auto;
-    
-`
-
-const WUserBlock = styled.figure`
-    display: flex;
-    flex-direction: column;
-`
-
-const WUserDescription = styled.article`
-    font-size:16px;
-`
-
-const WButtonBlock = styled.div`
-
-`
-
-const WEditButton = styled(WSubmitButtom)`
-    background-color:white;
-    color: ${outLineBlue};
-    border:solid 1px  ${outLineBlue};
-    &:hover{
-        background-color:${outLineBlue};
-        color:white;
-    }
-`
-
-const WDeleteUser = styled.a`
-    color:red;
-    &:hover {
-        color:red;
-        cursor:pointer;
-    }
-`
-
+import Spinner from '../../components/Spinner'
 
 interface TLocation {
 
@@ -73,20 +22,12 @@ interface UserPageProps extends RouteComponentProps<{ userId: string }, {}, TLoc
 
 }
 
-interface UserData {
-    description: null | string,
-    id: string,
-    picture_url: string
-    username: string
-}
-
-
 export const UserPage: React.FC<UserPageProps> = ({ history, location, match }) => {
     const [lightBoxStatus, setLightBoxStatus] = useState(false);
     const [editStatus, setEditStatus] = useState(location?.state?.editMode);
     const [lightBoxButtonText, setLightBoxButtonText] = useState("")
 
-    const { axiosStatus, axiosUserData, errorCode, message, userData, axiosGetSigleUserData, axiosDeleteUserData } = useUser()
+    const { axiosStatus, axiosUserData, errorCode, message, userData, axiosGetSingleUserData, axiosDeleteUserData } = useUser()
 
     const { userId } = match.params
 
@@ -95,7 +36,7 @@ export const UserPage: React.FC<UserPageProps> = ({ history, location, match }) 
     const { state } = location
 
     useEffect(() => {
-        axiosGetSigleUserData(userId)
+        axiosGetSingleUserData(userId)
 
     }, [userId, editStatus])
 
@@ -178,13 +119,7 @@ export const UserPage: React.FC<UserPageProps> = ({ history, location, match }) 
 
 
                 />}
-            {axiosStatus === "loading" &&
-                <Container>
-                    <Row className="justify-content-center">
-                        <Spinner size="sm" animation="border" />
-                    </Row>
-                </Container>
-            }
+            {axiosStatus === "loading" && <Spinner />}
             <LightBox //render props?
                 lightBoxText={lightBoxButtonText}
                 show={lightBoxStatus}
@@ -224,3 +159,54 @@ const LightBox = ({ lightBoxText, show, editAuthority, closeLightBox: closeDelet
         </Modal.Footer>
     </Modal >
 )
+
+const WUserPageSection = styled.section`
+    padding-top:100px;
+    padding-bottom:100px;
+`
+
+const WUserPageContainer = styled.div`
+    display:flex;
+    justify-content: center;
+    max-width:1000px;
+    margin:auto;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 150px;
+`
+
+const WUserImgList = styled(WUserImg)`
+    margin: 0 auto 20px auto;
+    
+`
+
+const WUserBlock = styled.figure`
+    display: flex;
+    flex-direction: column;
+`
+
+const WUserDescription = styled.article`
+    font-size:16px;
+`
+
+const WButtonBlock = styled.div`
+
+`
+
+const WEditButton = styled(WSubmitButton)`
+    background-color:white;
+    color: ${outLineBlue};
+    border:solid 1px  ${outLineBlue};
+    &:hover{
+        background-color:${outLineBlue};
+        color:white;
+    }
+`
+
+const WDeleteUser = styled.a`
+    color:red;
+    &:hover {
+        color:red;
+        cursor:pointer;
+    }
+`

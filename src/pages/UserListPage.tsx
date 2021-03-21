@@ -9,48 +9,8 @@ import styled from "styled-components"
 import { useUser } from "../hook"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { Spinner, Jumbotron, Container, Row } from "react-bootstrap";
-
-
-const WUserListSection = styled.section`
-    padding-top:100px;
-    padding-bottom:100px;
-    text-align: center;
-`
-
-const WUserListContainer = styled.div`
-    display:flex;
-    justify-content: center;
-    max-width:1000px;
-    margin:auto;
-    flex-wrap: wrap;
-`
-const WUserBlock = styled.figure`
-    cursor:pointer;
-    margin: 0 4rem auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 4rem;
-`
-const WInputBlock = styled.div`
-    overflow: hidden;
-    margin:  0 0 30px 0;
-    border-radius: 5px;
-    display: inline-block;
-`
-
-const WInput = styled.input`
-    border-radius: 0px 5px 5px 0px;
-    padding-left:5px;
-`
-
-const WSearchText = styled.span`
-    padding:5px 10px;
-    background-color:${baseGray};
-`
-
+import { Container, Row } from "react-bootstrap";
+import Spinner from '../components/Spinner'
 
 
 interface UserListPageProps extends RouteComponentProps<{}, {}, TLocation> {
@@ -118,7 +78,7 @@ export const UserListPage: React.FC<UserListPageProps> = ({ history, location })
     }
 
     const Pagination = ({ arrayItem, onePageNumber }: { arrayItem: TUser[] | undefined, onePageNumber: number }) => {
-        return <h1>SSSS</h1>
+        // return <h1>SSSS</h1>
     }
 
     return (
@@ -147,15 +107,54 @@ export const UserListPage: React.FC<UserListPageProps> = ({ history, location })
                         }
                         {userList?.length === 0 && <p>沒有資料</p>}
                     </WUserListContainer>}
-                {axiosStatus === "loading" &&
-                    <Container>
-                        <Row className="justify-content-center">
-                            <Spinner size="sm" animation="border" />
-                        </Row>
-                    </Container>}
-                <Pagination arrayItem={userList} onePageNumber={9} />
+                {axiosStatus === "loading" && <Spinner />}
+
+                {/* <Pagination arrayItem={userList} onePageNumber={9} /> */}
             </WUserListSection >
         </>
 
     );
 }
+
+
+const WUserListSection = styled.section`
+    padding-top:100px;
+    padding-bottom:100px;
+    text-align: center;
+`
+
+const WUserListContainer = styled.div`
+    display:flex;
+    justify-content: center;
+    max-width:1000px;
+    margin:auto;
+    flex-wrap: wrap;
+`
+
+const WUserBlock = styled.figure`
+    cursor:pointer;
+    margin: 0 4rem auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 4rem;
+`
+
+const WInputBlock = styled.div`
+    overflow: hidden;
+    margin:  0 0 30px 0;
+    border-radius: 5px;
+    display: inline-block;
+`
+
+const WInput = styled.input`
+    border-radius: 0px 5px 5px 0px;
+    padding-left:5px;
+`
+
+const WSearchText = styled.span`
+    padding:5px 10px;
+    background-color:${baseGray};
+`
+

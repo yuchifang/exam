@@ -8,32 +8,13 @@ import { FirstTopBlock } from "../../components/FirstTopBlock"
 import { Login } from "../Header/Login"
 
 
-const WLoginSection = styled.section`
-    padding-top:200px;
-    padding-bottom:200px;
-`
-const WLoginContainer = styled.div`
-    display:flex;
-    justify-content: center;
-    width:200px;
-    flex-direction: column;
-    margin:auto;
-`
-const WTagBlock = styled.div`
-    display:flex;
-    justify-content: center;
-    box-sizing: border-box;
-    margin-bottom: 10px;
-`
 
-interface LoginPageProps {
 
-}
 
-export const HomePage: React.FC<LoginPageProps> = () => {
+
+export const HomePage: React.FC = () => {
     return (
         <>
-            {/* <BrowserRouter> */}
             <FirstTopBlock />
             <Login />
             <WLoginSection>
@@ -43,16 +24,35 @@ export const HomePage: React.FC<LoginPageProps> = () => {
                             <Link to="/LoginPage/login">會員登入</Link>
                         </WTag>
                         <WTag>
-                            <Link to="/SignupPage/signup">加入會員</Link>
+                            <Link to="/SignUpPage/signUp">加入會員</Link>
                         </WTag>
                     </WTagBlock>
                     <Switch>
                         <Route path="/LoginPage/login" component={LoginAccount} />
-                        <Route path="/SignupPage/signup" component={CreateAccount} />
+                        <Route path="/SignUpPage/signUp" component={CreateAccount} />
                     </Switch>
                 </WLoginContainer>
             </WLoginSection>
-            {/* </BrowserRouter> */}
         </>
     );
 }
+
+const WLoginSection = styled.section`
+    padding-top:200px;
+    padding-bottom:200px;
+`
+
+const WLoginContainer = styled.div`
+    display:flex;
+    justify-content: center;
+    width:200px;
+    flex-direction: column;
+    margin:auto;
+`
+
+const WTagBlock = styled.div`
+    display:flex;
+    justify-content: center;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+`

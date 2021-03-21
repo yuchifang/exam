@@ -1,9 +1,9 @@
-import React from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom"
 import './App.css';
-import { UserPage } from "./pages/UserPage/UserPage"
 import "./styles/reset.scss"
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+import { UserPage } from "./pages/UserPage/UserPage"
 import { UserListPage } from "./pages/UserListPage"
 import { LoginAccount } from "./pages/HomePage/LoginAccount"
 import { CreateAccount } from "./pages/HomePage/CreateAccount"
@@ -14,7 +14,7 @@ const App = () => {
       <Switch>
         <Route exact path="/" component={UserListPage} />
         <Route path="/LoginPage/login" component={LoginAccount} />
-        <Route path="/SignupPage/signup" component={CreateAccount} />
+        <Route path="/SignUpPage/signUp" component={CreateAccount} />
         <Route exact path="/UserListPage/users" component={UserListPage} />
         <Route exact path="/UserPage/users/:userId" component={UserPage} />
         <Redirect to="/" />

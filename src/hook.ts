@@ -24,7 +24,7 @@ interface UpdateUserProps {
     //什麼狀態　做什麼事
     // 資料流　狀態流
     fileData: File | undefined,
-    descripotion: string | undefined | null,
+    description: string | undefined | null,
     username: string | undefined,
     location: LocationStateData,
     userId: string
@@ -131,7 +131,7 @@ export const useUser = () => {
                     setErrorCode(err)
                 })
         },
-        axiosUpdateAccount: async ({ fileData, descripotion, username, location, userId }: UpdateUserProps) => {
+        axiosUpdateAccount: async ({ fileData, description, username, location, userId }: UpdateUserProps) => {
 
             const getReadAsDataURL = (file: any) => {
                 return new Promise((resolve, reject) => {
@@ -149,7 +149,7 @@ export const useUser = () => {
 
                 const res = axios.post(`https://weblab-react-special-midtern.herokuapp.com/v1/users/${userId}`, {
                     username: username,
-                    description: descripotion,
+                    description: description,
                     pictureUrl: arrayBuffer
                 }, {
                     headers: {
@@ -177,7 +177,7 @@ export const useUser = () => {
                     setErrorCode(err)
                 })
         },
-        axiosGetSigleUserData: (userId: string) => {
+        axiosGetSingleUserData: (userId: string) => {
             const axiosGetSignUser = async () => {
                 setAxiosStatus("loading")
                 const res = await axios.get(`https://weblab-react-special-midtern.herokuapp.com/v1/users/${userId}`)

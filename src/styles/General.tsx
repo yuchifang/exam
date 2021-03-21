@@ -29,7 +29,7 @@ export const WInput = styled.input`
     font-size:16px;
 `
 
-export const WSubmitButtom = styled.button`
+export const WSubmitButton = styled.button`
     margin:5px 10px;
     margin-top: 10px;
     font-size: 15px;
