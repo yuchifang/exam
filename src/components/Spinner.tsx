@@ -22,7 +22,7 @@ const rotateCircleSecond = keyframes`
 
 export default function Spinner() {
     return (
-        <>
+        <WSpinnerBlock>
             <WSpinnerFirst>
                 <div></div>
                 <div></div>
@@ -35,10 +35,18 @@ export default function Spinner() {
                 <div></div>
                 <div></div>
             </WSpinnerSecond>
-        </>
+        </WSpinnerBlock>
     )
 }
 
+const WSpinnerBlock = styled.div`
+    position: absolute;
+    top:0;
+    bottom:0;
+    right:0;
+    left:0;
+    margin:auto;
+`
 
 const WSpinnerFirst = styled.div`
     display:flex;

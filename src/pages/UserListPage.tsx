@@ -31,7 +31,7 @@ interface TUser {
 
 export const UserListPage: React.FC<UserListPageProps> = ({ history, location }) => {
     const { axiosGetAllUserData, axiosStatus, axiosUserListData } = useUser()
-    const [seachValue, setSearchValue] = useState<string>("")
+    const [searchValue, setSearchValue] = useState<string>("")
     const [userList, setUserList] = useState<TUser[] | undefined>(axiosUserListData)
 
     useEffect(() => { //執行api
@@ -48,9 +48,9 @@ export const UserListPage: React.FC<UserListPageProps> = ({ history, location })
         const searchList = userList !== undefined ? [...userList] : null
 
         let searchResult
-        if (seachValue.trim() && searchList !== null) {
+        if (searchValue.trim() && searchList !== null) {
             searchResult = searchList.filter(item =>
-                item.username.indexOf(seachValue.trim()) !== -1
+                item.username.indexOf(searchValue.trim()) !== -1
             )
             if (searchResult !== undefined) {
                 setUserList(searchResult)
@@ -58,7 +58,7 @@ export const UserListPage: React.FC<UserListPageProps> = ({ history, location })
         } else {
             setUserList(axiosUserListData)
         }
-    }, [seachValue])
+    }, [searchValue])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchValue(e.target.value)
@@ -91,7 +91,7 @@ export const UserListPage: React.FC<UserListPageProps> = ({ history, location })
                     <WSearchText>
                         <FontAwesomeIcon icon={faSearch} />
                     </WSearchText>
-                    <WInput type="text" onChange={handleChange} value={seachValue} placeholder="搜尋使用者" />
+                    <WInput type="text" onChange={handleChange} value={searchValue} placeholder="搜尋使用者" />
                 </WInputBlock>
                 {axiosStatus === "success" &&
                     <WUserListContainer>
