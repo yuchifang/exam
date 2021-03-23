@@ -5,7 +5,6 @@ import styled from "styled-components"
 import { useUser } from "../../hook"
 import { WInput, WSubmitButton, WTag } from "../../styles/General"
 import { WebTopBlock } from "../../components/WebTopBlock"
-import Spinner from "../../components/Spinner";
 
 export const LoginAccount: React.FC<RouteComponentProps> = ({ history }) => {
 
@@ -55,7 +54,7 @@ export const LoginAccount: React.FC<RouteComponentProps> = ({ history }) => {
                     <WInput placeholder="密碼" type="password" ref={passwordRef} />
                     <WSubmitButton onClick={() => handleSubmit()}>
                         {axiosStatus !== "loading" && "登入"}
-                        {axiosStatus === "loading" && <Spinner />}
+                        {axiosStatus === "loading" && "登入中"}
                     </WSubmitButton>
                 </WLoginContainer>
             </WLoginSection>

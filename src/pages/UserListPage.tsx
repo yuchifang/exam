@@ -31,7 +31,7 @@ interface TUser {
 
 export const UserListPage: React.FC<UserListPageProps> = ({ history, location }) => {
     const { axiosGetAllUserData, axiosStatus, axiosUserListData } = useUser()
-    const [seachValue, setSeachValue] = useState<string>("")
+    const [seachValue, setSearchValue] = useState<string>("")
     const [userList, setUserList] = useState<TUser[] | undefined>(axiosUserListData)
 
     useEffect(() => { //執行api
@@ -61,7 +61,7 @@ export const UserListPage: React.FC<UserListPageProps> = ({ history, location })
     }, [seachValue])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSeachValue(e.target.value)
+        setSearchValue(e.target.value)
     }
 
     const handleUserBlockClick = (id: string) => {

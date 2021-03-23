@@ -7,11 +7,6 @@ import { CreateAccount } from "./CreateAccount"
 import { WebTopBlock } from "../../components/WebTopBlock"
 import { Login } from "../Header/Login"
 
-
-
-
-
-
 export const HomePage: React.FC = () => {
     return (
         <>

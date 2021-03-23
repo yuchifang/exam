@@ -40,7 +40,7 @@ export const EditorPage: React.FC<EditorPageProps> = ({
     const [imgUrl, setImgUrl] = useState<string>("")
     let userImgUrl = imgUrl ? imgUrl : userData?.picture_url
 
-    const { axiosStatus, axiosUserData, errorCode, message, axiosUpdateAccount } = useUser()
+    const { axiosStatus, errorCode, message, axiosUpdateAccount } = useUser()
 
 
     useEffect(() => {

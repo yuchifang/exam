@@ -68,7 +68,7 @@ export const CreateAccount: React.FC<RouteComponentProps> = ({ history }) => {
                     <WInput placeholder="密碼" type="password" ref={passwordRef} />
                     <WSubmitButton onClick={() => handleSubmit()}>
                         {axiosStatus !== "loading" && "加入"}
-                        {axiosStatus === "loading" && <Spinner />}
+                        {axiosStatus === "loading" && '加入中'}
                     </WSubmitButton>
                 </WLoginContainer>
             </WLoginSection>

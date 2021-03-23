@@ -43,7 +43,7 @@ export default function Spinner() {
 const WSpinnerFirst = styled.div`
     display:flex;
     position:relative;
-    top:250px;
+    top:50%;
     margin:0 auto;
     background-color:transparent;
     
@@ -93,7 +93,8 @@ const WSpinnerFirst = styled.div`
 const WSpinnerSecond = styled.div`
     display:flex;
     position:relative;
-    top:240px;
+    top: calc( 50% - 10px );
+    transform:translateY(-50%);
     margin:0 auto;
     background-color:transparent;
     animation: ${rotateCircleSecond} 1s infinite linear ;
