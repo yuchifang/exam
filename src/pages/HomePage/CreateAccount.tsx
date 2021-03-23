@@ -4,7 +4,7 @@ import { RouteComponentProps, Link } from 'react-router-dom'
 import styled from "styled-components"
 import { WebTopBlock } from "../../components/WebTopBlock"
 import { useUser } from "../../hook"
-import Spinner from "../../components/Spinner";
+import { Spinner } from 'react-bootstrap'
 
 // 　沒有選擇圖片　情況
 // 　加上必填提醒　
@@ -68,7 +68,7 @@ export const CreateAccount: React.FC<RouteComponentProps> = ({ history }) => {
                     <WInput placeholder="密碼" type="password" ref={passwordRef} />
                     <WSubmitButton onClick={() => handleSubmit()}>
                         {axiosStatus !== "loading" && "加入"}
-                        {axiosStatus === "loading" && '加入中'}
+                        {axiosStatus === "loading" && <Spinner size="sm" animation="border" />}
                     </WSubmitButton>
                 </WLoginContainer>
             </WLoginSection>
