@@ -5,6 +5,7 @@ import styled from "styled-components"
 import { useUser } from "../../hook"
 import { WInput, WSubmitButton, WTag } from "../../styles/General"
 import { WebTopBlock } from "../../components/WebTopBlock"
+import { Spinner } from 'react-bootstrap'
 
 export const LoginAccount: React.FC<RouteComponentProps> = ({ history }) => {
 
