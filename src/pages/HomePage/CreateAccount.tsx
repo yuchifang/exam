@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react'
 import { WInput, WSubmitButton, WTag } from "../../styles/General"
 import { RouteComponentProps, Link } from 'react-router-dom'
 import styled from "styled-components"
-import { WWebTopBlock } from "../../components/WebTopBlock"
+import { WebTopBlock } from "../../components/WebTopBlock"
 import { useUser } from "../../hook"
 import Spinner from "../../components/Spinner";
 
@@ -52,7 +52,7 @@ export const CreateAccount: React.FC<RouteComponentProps> = ({ history }) => {
 
     return (
         <>
-            <WWebTopBlock />
+            <WebTopBlock />
             <WLoginSection>
                 <WLoginContainer>
                     <WTagBlock>

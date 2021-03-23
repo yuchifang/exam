@@ -4,7 +4,7 @@ import styled from "styled-components"
 
 import { useUser } from "../../hook"
 import { WInput, WSubmitButton, WTag } from "../../styles/General"
-import { WWebTopBlock } from "../../components/WebTopBlock"
+import { WebTopBlock } from "../../components/WebTopBlock"
 import Spinner from "../../components/Spinner";
 
 export const LoginAccount: React.FC<RouteComponentProps> = ({ history }) => {
@@ -40,7 +40,7 @@ export const LoginAccount: React.FC<RouteComponentProps> = ({ history }) => {
 
     return (
         <>
-            <WWebTopBlock />
+            <WebTopBlock />
             <WLoginSection>
                 <WLoginContainer>
                     <WTagBlock>

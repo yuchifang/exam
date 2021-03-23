@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import styled from "styled-components"
 import { RouteComponentProps, Route } from "react-router-dom"
 import { Jumbotron, Container, Row } from "react-bootstrap"
-import { WUserText, WUserImg, WSubmitButton, outLineBlue } from "../../styles/General"
+import { WUserText, WUserImg, WSubmitButton, Blue400 } from "../../styles/General"
 import { Modal, Button } from "react-bootstrap";
 import { Logout } from "../Header/Logout"
-import { WWebTopBlock } from "../../components/WebTopBlock"
+import { WebTopBlock } from "../../components/WebTopBlock"
 import { EditorPage } from "./EditorPage"
 import { useUser } from "../../hook"
 import Spinner from '../../components/Spinner'
@@ -104,7 +104,7 @@ export const UserPage: React.FC<UserPageProps> = ({ history, location, match }) 
 
     return (
         <>
-            <WWebTopBlock />
+            <WebTopBlock />
             <Route component={Logout} />
             {axiosStatus === "success" && !editStatus && <UserPage />}
 
@@ -195,10 +195,10 @@ const WButtonBlock = styled.div`
 
 const WEditButton = styled(WSubmitButton)`
     background-color:white;
-    color: ${outLineBlue};
-    border:solid 1px  ${outLineBlue};
+    color: ${Blue400};
+    border:solid 1px  ${Blue400};
     &:hover{
-        background-color:${outLineBlue};
+        background-color:${Blue400};
         color:white;
     }
 `

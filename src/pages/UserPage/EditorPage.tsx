@@ -1,7 +1,7 @@
 
 import React, { useRef, useState, useEffect } from 'react'
 import styled from "styled-components"
-import { WUserImg, WSubmitButton, outLineBlue } from "../../styles/General"
+import { WUserImg, WSubmitButton, Blue400 } from "../../styles/General"
 import { useUser } from "../../hook"
 
 interface TLocation {
@@ -146,10 +146,10 @@ const WButtonBlock = styled.div`
 
 const WEditButton = styled(WSubmitButton)`
     background-color:white;
-    color: ${outLineBlue};
-    border:solid 1px  ${outLineBlue};
+    color: ${Blue400};
+    border:solid 1px  ${Blue400};
     &:hover{
-        background-color:${outLineBlue};
+        background-color:${Blue400};
         color:white;
     }
 `

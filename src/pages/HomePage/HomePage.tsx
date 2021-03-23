@@ -4,7 +4,7 @@ import { WTag } from "../../styles/General"
 import { Switch, Route, Link } from "react-router-dom"
 import { LoginAccount } from "./LoginAccount"
 import { CreateAccount } from "./CreateAccount"
-import { WWebTopBlock } from "../../components/WebTopBlock"
+import { WebTopBlock } from "../../components/WebTopBlock"
 import { Login } from "../Header/Login"
 
 
@@ -15,7 +15,7 @@ import { Login } from "../Header/Login"
 export const HomePage: React.FC = () => {
     return (
         <>
-            <WWebTopBlock />
+            <WebTopBlock />
             <Login />
             <WLoginSection>
                 <WLoginContainer>

@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from "styled-components"
-import { outLineBlue, headerBlue } from "../../styles/General"
+import { Blue400, Blue600, Button } from "../../styles/General"
 import { Link } from "react-router-dom"
 
 
@@ -19,8 +19,8 @@ export const Login: React.FC = () => {
 const WHeaderBlock = styled.div`
     width:100%;
     height:50px;
-    background-color: ${headerBlue};
-    border: 2px solid ${outLineBlue};
+    background-color: ${Blue600};
+    border: 2px solid ${Blue400};
     box-sizing: border-box;
     display:flex;
     justify-content: space-between;
@@ -30,14 +30,5 @@ const WHeaderBlock = styled.div`
 
 const WLoginButton = styled.button`
     padding: 5px 10px;
-    color: ${outLineBlue};
-    cursor:pointer;
-    border: 2px solid ${outLineBlue};
-    &:active{
-        border: 2px solid ${outLineBlue};
-        background-color: #ddd;
-    }
-    &:focus{
-        outline: 1px solid  ${outLineBlue};
-    }
+   ${Button}
 `

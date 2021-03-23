@@ -1,8 +1,17 @@
-import styled from "styled-components";
-export const baseBlue = "#44f";
+import styled, { css } from "styled-components";
+export const purpleBlue = "#44f";
 export const baseGray = "#89a";
-export const headerBlue = "cornflowerblue"
-export const outLineBlue = "dodgerblue"
+export const Blue600 = "cornflowerblue"
+export const Blue400 = "dodgerblue"
+//
+export const Button = css`
+    color: ${Blue400};
+    cursor:pointer;
+    border: 2px solid ${Blue400};
+    &:active{
+        border: 2px solid ${Blue600};
+        background-color: #ddd;
+`
 
 export const WTag = styled.div`
     cursor:pointer;
@@ -14,8 +23,8 @@ export const WTag = styled.div`
         margin-left:15px;
     }
     &:hover{
-        color: ${baseBlue};
-        box-shadow:0 -3px 0 ${baseBlue} inset ;
+        color: ${purpleBlue};
+        box-shadow:0 -3px 0 ${purpleBlue} inset ;
     }
     a {
         text-decoration:none;
@@ -35,7 +44,7 @@ export const WSubmitButton = styled.button`
     font-size: 15px;
     padding: 7px;
     color: white;
-    background-color:${baseBlue};
+    background-color:${purpleBlue};
     cursor:pointer;
     border: unset;
     position: relative;
