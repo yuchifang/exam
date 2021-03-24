@@ -3,7 +3,11 @@ export const purpleBlue = "#44f";
 export const baseGray = "#89a";
 export const Blue600 = "cornflowerblue"
 export const Blue400 = "dodgerblue"
-//
+export const gary800 = "#1f292e"
+export const gary500 = "#78909c";
+export const gary100 = "#546e7a"
+export const blue50 = "#e2f3f1"
+
 export const Button = css`
     color: ${Blue400};
     cursor:pointer;

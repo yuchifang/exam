@@ -9,9 +9,8 @@ import styled from "styled-components"
 import { useUser } from "../hook"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { Container, Row } from "react-bootstrap";
 import Spinner from '../components/Spinner'
-
+import Pagination from '../components/Pagination'
 
 interface UserListPageProps extends RouteComponentProps<{}, {}, TLocation> {
 
@@ -29,10 +28,27 @@ interface TUser {
     username: string,
 }
 
+type DefaultPageState = {
+    currentPage: number,
+    maxIndex: number,
+    minIndex: number
+}
+
+const singlePageItemCount = 18
+
+const defaultPageState = {
+    currentPage: 1,
+    maxIndex: singlePageItemCount,
+    minIndex: 0
+}
+
 export const UserListPage: React.FC<UserListPageProps> = ({ history, location }) => {
     const { axiosGetAllUserData, axiosStatus, axiosUserListData } = useUser()
     const [searchValue, setSearchValue] = useState<string>("")
     const [userList, setUserList] = useState<TUser[] | undefined>(axiosUserListData)
+    const [pageState, setPageState] = useState<DefaultPageState>(defaultPageState)
+
+    console.log({ pageState })
 
     useEffect(() => { //執行api
         //抓一次資料 會render 6~7次
@@ -77,8 +93,12 @@ export const UserListPage: React.FC<UserListPageProps> = ({ history, location })
         }
     }
 
-    const Pagination = ({ arrayItem, onePageNumber }: { arrayItem: TUser[] | undefined, onePageNumber: number }) => {
-        // return <h1>SSSS</h1>
+    const handlePage = (page: number) => {
+        setPageState({
+            currentPage: page,
+            maxIndex: singlePageItemCount * page,
+            minIndex: singlePageItemCount * (page - 1)
+        })
     }
 
     return (
@@ -96,20 +116,30 @@ export const UserListPage: React.FC<UserListPageProps> = ({ history, location })
                 {axiosStatus === "success" &&
                     <WUserListContainer>
                         {
-                            (userList !== undefined && userList.length > 0) && userList.map((user: TUser) => {
-                                return (
-                                    <WUserBlock key={user.id} onClick={() => handleUserBlockClick(user.id)}>
-                                        <WUserImg src={user.picture_url} alt="userImg" />
-                                        <WUserText>{user.username}</WUserText>
-                                    </WUserBlock>
-                                )
+                            (userList !== undefined && userList.length > 0) && userList.map((user: TUser, index: number) => {
+                                if (index < pageState.maxIndex && pageState.minIndex <= index) {
+                                    return (
+                                        <WUserBlock key={user.id} onClick={() => handleUserBlockClick(user.id)}>
+                                            <WUserImg src={user.picture_url} alt="userImg" />
+                                            <WUserText>{user.username}</WUserText>
+                                        </WUserBlock>
+                                    )
+                                }
                             })
                         }
                         {userList?.length === 0 && <p>沒有資料</p>}
                     </WUserListContainer>}
+                {
+                    (userList !== undefined && userList.length > 0) &&
+                    <Pagination
+                        onChange={handlePage}
+                        ListLength={userList.length}
+                        singlePageItemCount={singlePageItemCount}
+                        currentPage={pageState.currentPage}
+                    />
+                }
                 {axiosStatus === "loading" && <Spinner />}
 
-                {/* <Pagination arrayItem={userList} onePageNumber={9} /> */}
             </WUserListSection >
         </>
 
