@@ -60,11 +60,10 @@ export const UserListPage: React.FC<UserListPageProps> = ({ history, location })
 
     useEffect(() => { //搜尋功能 如果沒有搜尋Input 為空 則set原本api的資料
         //每search render 2次
-        const searchList = userList !== undefined ? [...userList] : null
 
         let searchResult
-        if (searchValue.trim() && searchList !== null) {
-            searchResult = searchList.filter(item =>
+        if (searchValue.trim() && !!axiosUserListData) {
+            searchResult = axiosUserListData.filter(item =>
                 item.username.indexOf(searchValue.trim()) !== -1
             )
             if (searchResult !== undefined) {
@@ -76,12 +75,13 @@ export const UserListPage: React.FC<UserListPageProps> = ({ history, location })
     }, [searchValue])
 
 
-    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter' && !!searchInputRef.current) {
             setSearchValue(searchInputRef.current.value)
             searchInputRef.current.value = ""
         }
     }
+
 
     const handleOnClick = () => {
         if (!!searchInputRef.current) {
@@ -124,7 +124,7 @@ export const UserListPage: React.FC<UserListPageProps> = ({ history, location })
                     <WInput
                         ref={searchInputRef}
                         type="text"
-                        onKeyPress={(e) => handleKeyPress(e)}
+                        onKeyDown={(e) => handleKeyDown(e)}
                         placeholder="搜尋使用者" />
                 </WInputBlock>
                 {
