@@ -23,7 +23,7 @@ export const CreateAccount: React.FC<RouteComponentProps> = ({ history }) => {
             if (axiosUserData) {
                 axiosUserData.editMode = true
                 const locationUseList = {
-                    pathname: `/UserPage/users/${axiosUserData?.memberId}`,
+                    pathname: `/UserInfoPage/users/${axiosUserData?.memberId}`,
                     state: axiosUserData,
                 }
                 history.push(locationUseList)

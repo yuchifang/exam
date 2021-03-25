@@ -22,21 +22,22 @@ interface UserInfoPageProps extends RouteComponentProps<{ userId: string }, {}, 
 }
 
 export const UserInfoPage: React.FC<UserInfoPageProps> = ({ history, location, match }) => {
-    const [lightBoxStatus, setLightBoxStatus] = useState(false);
-    const [isEditMode, setIsEditStatus] = useState(location?.state?.editMode);
+    const [isLightBoxVisible, setIsLightBoxVisible] = useState(false);
+    const [isEditAble, setIsEditAble] = useState(location?.state?.editMode);
     const [lightBoxButtonText, setLightBoxButtonText] = useState("")
 
     const { axiosStatus, axiosUserData, errorCode, message, userData, axiosGetSingleUserData, axiosDeleteUserData } = useUser()
 
     const { userId } = match.params
-    const hasEditAuthority = userId === location.state.memberId
+    const hasAuthority = userId === location.state.memberId
     const { state } = location
+
 
     useEffect(() => {
 
         axiosGetSingleUserData(userId)
 
-    }, [userId, isEditMode])
+    }, [userId, isEditAble])
 
     useEffect(() => {
         if (axiosStatus === "success") {
@@ -53,112 +54,110 @@ export const UserInfoPage: React.FC<UserInfoPageProps> = ({ history, location, m
         }
     }, [axiosStatus])
 
-    const closeLightBox = () => setLightBoxStatus(false);
 
-    const openLightBox = (text: string) => {
-        if (hasEditAuthority && text === "編輯") {
-            setIsEditStatus(true)
-        } else {
-            setLightBoxStatus(true)
-            setLightBoxButtonText(text)
+    const handleEdit = () => {
+        // 是否能編輯
+        // 開始編輯
+        if (hasAuthority) {
+            setIsEditAble(true)
         }
 
+        if (!hasAuthority) {
+            setIsLightBoxVisible(true)
+            setLightBoxButtonText("編輯")
+        }
     }
 
+    const handleDelete = () => {
+        setIsLightBoxVisible(true)
+        setLightBoxButtonText("刪除")
+    }
+
+
     const lightBoxCancelConfirm = () => {
-        setLightBoxStatus(false)
+        setIsLightBoxVisible(false)
         axiosDeleteUserData({ userId, jwtString: state.jwtString })
     }
 
     const lightBoxEditConfirm = () => {
-        setLightBoxStatus(false)
-        setIsEditStatus(true)
+        setIsLightBoxVisible(false)
+        setIsEditAble(true)
     }
 
     const cancelEditPage = () => {
-        setIsEditStatus(false)
+        setIsEditAble(false)
     }
 
-    const UserPage = useMemo(() =>
-        <>
-            <WUserPageSection>
-                <WUserPageContainer>
-                    <WUserBlock>
-                        <WUserImgList src={userData?.picture_url} alt="userImg" />
-                        <WUserText>username__{userData?.username}</WUserText>
-                    </WUserBlock>
-                    <WUserDescription>description__
-                    {!!userData?.description === false && "no description here"}
-                        {!!userData?.description === true && userData?.description}
-                    </WUserDescription>
-                    <WButtonBlock>
-                        {/* 下次遇到可以考慮用disable 來控制 */}
-                        <WEditButton onClick={() => openLightBox("編輯")}>編輯</WEditButton>
-                        <WDeleteUser onClick={() => openLightBox("刪除")}>刪除此使用者</WDeleteUser>
-                    </WButtonBlock>
-                </WUserPageContainer>
-            </WUserPageSection>
-        </>
-        , [])
+    const UserPage = () => <>
+        <WUserPageSection>
+            <WUserPageContainer>
+                <WUserBlock>
+                    <WUserImgList src={userData?.picture_url} alt="userImg" />
+                    <WUserText>username: {userData?.username}</WUserText>
+                </WUserBlock>
+                <WUserDescription>description:
+                    {!!userData?.description === false && " no description here"}
+                    {!!userData?.description === true && userData?.description}
+                </WUserDescription>
+                <WButtonBlock>
+                    {/* 下次遇到可以考慮用disable 來控制 */}
+                    <WEditButton onClick={() => handleEdit()}>編輯</WEditButton>
+                    <WDeleteUser onClick={() => handleDelete()}>刪除此使用者</WDeleteUser>
+                </WButtonBlock>
+            </WUserPageContainer>
+        </WUserPageSection>
+    </>
 
 
     return (
         <>
             <WebTopBlock />
             <Route component={Logout} />
-            {axiosStatus === "success" && !isEditMode && UserPage}
+            {
+                axiosStatus === "success" && <>
 
-            {axiosStatus === "success" && !!isEditMode &&
-                <EditorPage
-                    userId={userId}
-                    userData={userData}
-                    onCancel={cancelEditPage}
-                    editDom={isEditMode}
-                    setEditDom={setIsEditStatus}
-                    editorLocation={state}
+                    {!isEditAble && <UserPage />}
 
-
-                />
+                    {!!isEditAble && <>
+                        {
+                            hasAuthority &&
+                            <EditorPage
+                                userId={userId}
+                                userData={userData}
+                                onCancel={cancelEditPage}
+                                editDom={isEditAble}
+                                setEditDom={setIsEditAble}
+                                editorLocation={state}
+                            />
+                        }
+                    </>
+                    }
+                </>
             }
             {axiosStatus === "loading" && <Spinner />}
-
             {
-                hasEditAuthority &&
-                <Modal show={lightBoxStatus} onHide={closeLightBox}>
+                hasAuthority &&
+                <Modal show={isLightBoxVisible} onHide={() => setIsLightBoxVisible(false)}>
                     <Modal.Header closeButton>
-                        {hasEditAuthority && <Modal.Title>{lightBoxButtonText}此使用者</Modal.Title>}
-                        {!hasEditAuthority && <Modal.Title>你非此使用者　無法{lightBoxButtonText}</Modal.Title>}
+                        <Modal.Title>{lightBoxButtonText}此使用者</Modal.Title>
                     </Modal.Header>
                     <Modal.Footer>
-                        <Button variant="secondary" onClick={closeLightBox}>取消</Button>
+                        <Button variant="secondary" onClick={() => setIsLightBoxVisible(false)}>取消</Button>
                         {
-                            hasEditAuthority && lightBoxButtonText === "刪除" &&
+                            lightBoxButtonText === "刪除" &&
                             < Button variant="danger" onClick={lightBoxCancelConfirm}>確認</Button>
-                        }
-                        {
-                            hasEditAuthority && lightBoxButtonText === "編輯" &&
-                            < Button variant="danger" onClick={lightBoxEditConfirm}>確認</Button>
                         }
                     </Modal.Footer>
                 </Modal >
             }
             {
-                !hasEditAuthority &&
-                <Modal show={lightBoxStatus} onHide={closeLightBox}>
+                !hasAuthority &&
+                <Modal show={isLightBoxVisible} onHide={() => setIsLightBoxVisible(false)}>
                     <Modal.Header closeButton>
-                        {hasEditAuthority && <Modal.Title>{lightBoxButtonText}此使用者</Modal.Title>}
-                        {!hasEditAuthority && <Modal.Title>你非此使用者　無法{lightBoxButtonText}</Modal.Title>}
+                        <Modal.Title>你非此使用者　無法{lightBoxButtonText}</Modal.Title>
                     </Modal.Header>
                     <Modal.Footer>
-                        <Button variant="secondary" onClick={closeLightBox}>取消</Button>
-                        {
-                            hasEditAuthority && lightBoxButtonText === "刪除" &&
-                            < Button variant="danger" onClick={lightBoxCancelConfirm}>確認</Button>
-                        }
-                        {
-                            hasEditAuthority && lightBoxButtonText === "編輯" &&
-                            < Button variant="danger" onClick={lightBoxEditConfirm}>確認</Button>
-                        }
+                        <Button variant="secondary" onClick={() => setIsLightBoxVisible(false)}>取消</Button>
                     </Modal.Footer>
                 </Modal >
             }

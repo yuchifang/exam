@@ -84,7 +84,7 @@ export const UserListPage: React.FC<UserListPageProps> = ({ history, location })
         if (location.state !== undefined) {
 
             const locationUseList = {
-                pathname: `/UserPage/users/${id}`,
+                pathname: `/UserInfoPage/users/${id}`,
                 state: location.state,
             }
             history.push(locationUseList)
@@ -113,33 +113,36 @@ export const UserListPage: React.FC<UserListPageProps> = ({ history, location })
                     </WSearchText>
                     <WInput type="text" onChange={handleChange} value={searchValue} placeholder="搜尋使用者" />
                 </WInputBlock>
-                {axiosStatus === "success" &&
-                    <WUserListContainer>
-                        {
-                            (userList !== undefined && userList.length > 0) && userList.map((user: TUser, index: number) => {
-                                if (index < pageState.maxIndex && pageState.minIndex <= index) {
-                                    return (
-                                        <WUserBlock key={user.id} onClick={() => handleUserBlockClick(user.id)}>
-                                            <WUserImg src={user.picture_url} alt="userImg" />
-                                            <WUserText>{user.username}</WUserText>
-                                        </WUserBlock>
-                                    )
-                                }
-                            })
-                        }
-                        {userList?.length === 0 && <p>沒有資料</p>}
-                    </WUserListContainer>}
                 {
-                    (userList !== undefined && userList.length > 0) &&
-                    <Pagination
-                        onChange={handlePage}
-                        ListLength={userList.length}
-                        singlePageItemCount={singlePageItemCount}
-                        currentPage={pageState.currentPage}
-                    />
+                    axiosStatus === "success" &&
+                    <>
+                        <WUserListContainer>
+                            {
+                                (userList !== undefined && userList.length > 0) && userList.map((user: TUser, index: number) => {
+                                    if (index < pageState.maxIndex && pageState.minIndex <= index) {
+                                        return (
+                                            <WUserBlock key={user.id} onClick={() => handleUserBlockClick(user.id)}>
+                                                <WUserImg src={user.picture_url} alt="userImg" />
+                                                <WUserText>{user.username}</WUserText>
+                                            </WUserBlock>
+                                        )
+                                    }
+                                })
+                            }
+                            {userList?.length === 0 && <p>沒有資料</p>}
+                        </WUserListContainer>
+                        {
+                            (userList !== undefined && userList.length > 0 && pageState.maxIndex < singlePageItemCount) &&
+                            <Pagination
+                                onChange={handlePage}
+                                ListLength={userList.length}
+                                singlePageItemCount={singlePageItemCount}
+                                currentPage={pageState.currentPage}
+                            />
+                        }
+                    </>
                 }
                 {axiosStatus === "loading" && <Spinner />}
-
             </WUserListSection >
         </>
 

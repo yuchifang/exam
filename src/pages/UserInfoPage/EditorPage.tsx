@@ -103,7 +103,11 @@ export const EditorPage: React.FC<EditorPageProps> = ({
                     </WFileBlock>
                     <WUserTextInput required ref={usernameRef} placeholder={userData?.username} />
                 </WUserBlock>
-                <WUserDescriptionTextArea ref={textAreaRef} rows={4} cols={50} placeholder={!!userData?.description ? userData?.description : "type something"} />
+                <WUserDescriptionTextArea
+                    ref={textAreaRef}
+                    rows={4}
+                    cols={50}
+                    placeholder={!!userData?.description ? userData?.description : "type something"} />
                 <WButtonBlock>
                     <WEditButton onClick={() => onCancel()}>取消</WEditButton>
                     <WEditButton onClick={() => EditPageSave()}>儲存</WEditButton>
