@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { baseGray } from "../styles/General"
 import { Logout } from "./Header/Logout"
 import { Login } from "./Header/Login"
@@ -38,7 +38,7 @@ const singlePageItemCount = 18
 
 const defaultPageState = {
     currentPage: 1,
-    maxIndex: singlePageItemCount,
+    maxIndex: 0,
     minIndex: 0
 }
 
@@ -47,8 +47,7 @@ export const UserListPage: React.FC<UserListPageProps> = ({ history, location })
     const [searchValue, setSearchValue] = useState<string>("")
     const [userList, setUserList] = useState<TUser[] | undefined>(axiosUserListData)
     const [pageState, setPageState] = useState<DefaultPageState>(defaultPageState)
-
-    console.log({ pageState })
+    const searchInputRef = useRef<HTMLInputElement>(null)
 
     useEffect(() => { //執行api
         //抓一次資料 會render 6~7次
@@ -76,8 +75,19 @@ export const UserListPage: React.FC<UserListPageProps> = ({ history, location })
         }
     }, [searchValue])
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchValue(e.target.value)
+
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter' && !!searchInputRef.current) {
+            setSearchValue(searchInputRef.current.value)
+            searchInputRef.current.value = ""
+        }
+    }
+
+    const handleOnClick = () => {
+        if (!!searchInputRef.current) {
+            setSearchValue(searchInputRef.current.value)
+            searchInputRef.current.value = ""
+        }
     }
 
     const handleUserBlockClick = (id: string) => {
@@ -108,10 +118,14 @@ export const UserListPage: React.FC<UserListPageProps> = ({ history, location })
             {(location.state !== undefined) && <Route component={Logout} />}
             <WUserListSection>
                 <WInputBlock >
-                    <WSearchText>
+                    <WSearchText onClick={() => handleOnClick()}>
                         <FontAwesomeIcon icon={faSearch} />
                     </WSearchText>
-                    <WInput type="text" onChange={handleChange} value={searchValue} placeholder="搜尋使用者" />
+                    <WInput
+                        ref={searchInputRef}
+                        type="text"
+                        onKeyPress={(e) => handleKeyPress(e)}
+                        placeholder="搜尋使用者" />
                 </WInputBlock>
                 {
                     axiosStatus === "success" &&
@@ -132,7 +146,7 @@ export const UserListPage: React.FC<UserListPageProps> = ({ history, location })
                             {userList?.length === 0 && <p>沒有資料</p>}
                         </WUserListContainer>
                         {
-                            (userList !== undefined && userList.length > 0 && pageState.maxIndex < singlePageItemCount) &&
+                            (userList !== undefined && userList.length > 0 && userList.length > singlePageItemCount) &&
                             <Pagination
                                 onChange={handlePage}
                                 ListLength={userList.length}
@@ -187,6 +201,7 @@ const WInput = styled.input`
 `
 
 const WSearchText = styled.span`
+    cursor:pointer;
     padding:5px 10px;
     background-color:${baseGray};
 `

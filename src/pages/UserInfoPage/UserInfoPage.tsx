@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from "styled-components"
 import { RouteComponentProps, Route } from "react-router-dom"
 import { WUserText, WUserImg, WSubmitButton, Blue400 } from "../../styles/General"
@@ -56,8 +56,7 @@ export const UserInfoPage: React.FC<UserInfoPageProps> = ({ history, location, m
 
 
     const handleEdit = () => {
-        // 是否能編輯
-        // 開始編輯
+
         if (hasAuthority) {
             setIsEditAble(true)
         }
@@ -79,10 +78,6 @@ export const UserInfoPage: React.FC<UserInfoPageProps> = ({ history, location, m
         axiosDeleteUserData({ userId, jwtString: state.jwtString })
     }
 
-    const lightBoxEditConfirm = () => {
-        setIsLightBoxVisible(false)
-        setIsEditAble(true)
-    }
 
     const cancelEditPage = () => {
         setIsEditAble(false)

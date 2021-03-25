@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import { useState } from "react"
 import axios from "axios"
 import jwtDecode from "jwt-decode";
 
@@ -70,7 +70,6 @@ export const useUser = () => {
                     setMessage(res.data.message)
                     const jwtString = res.data.result.authToken
                     const decoded: LocationStateData = jwtDecode(res.data.result.authToken)
-                    console.log("decoded", decoded)
                     const locationState = {
                         memberId: decoded?.memberId,
                         jwtString: jwtString,
@@ -109,7 +108,6 @@ export const useUser = () => {
                     setMessage(res.data.message)
                     const jwtString = res.data.result.authToken
                     const decoded: LocationStateData = jwtDecode(res.data.result.authToken)
-                    console.log("decoded", decoded)
                     const locationState = {
                         memberId: decoded?.memberId,
                         jwtString: jwtString,
@@ -172,7 +170,6 @@ export const useUser = () => {
                     setErrorCode("success no error")
                 })
                 .catch((err) => {
-                    console.log("hooks", err)
                     setAxiosStatus("error")
                     setErrorCode(err)
                 })
